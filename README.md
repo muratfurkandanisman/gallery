@@ -1,92 +1,10 @@
-# Gallery Web App (PHP + PostgreSQL/Oracle)
+<img width="1919" height="936" alt="Screenshot 2026-04-10 162246" src="https://github.com/user-attachments/assets/c241353a-725c-4f7c-b037-42c313931a9b" />
+<img width="1919" height="945" alt="Screenshot 2026-04-10 162045" src="https://github.com/user-attachments/assets/cab66dcd-ddec-4004-b682-60f0055525d3" />
+<img width="1919" height="941" alt="Screenshot 2026-04-10 162059" src="https://github.com/user-attachments/assets/fd13f4a0-7386-4ae7-b622-9cfe71e04538" />
+<img width="1919" height="939" alt="Screenshot 2026-04-10 162229" src="https://github.com/user-attachments/assets/021f4c1b-4b85-44d2-b310-beec84ceffc3" />
+<img width="1919" height="941" alt="Screenshot 2026-04-10 162259" src="https://github.com/user-attachments/assets/2d0f43d4-0c36-4e45-bcc3-ea4ef1dc2101" />
+<img width="1919" height="941" alt="Screenshot 2026-04-10 162110" src="https://github.com/user-attachments/assets/c506a530-43e7-4db4-95ef-29ff0c2942b7" />
+<img width="1919" height="941" alt="Screenshot 2026-04-10 162149" src="https://github.com/user-attachments/assets/f50c3cca-4b3c-4e63-8e67-89d0c44ba4ca" />
 
-Bu proje galerici senaryosu icin hazir MVP sistemidir.
 
-## Ozellikler
 
-- Guest: arac listeleme + detay
-- User: kayit/giris, favori ekleme, iletisim talebi olusturma
-- Admin: arac ekleme, satildi isaretleme, satilanlari gorme, talepleri yonetme
-- Satilan araclar guest/user listesinde gorunmez
-
-## Kurulum (PostgreSQL Onerilen)
-
-1. PostgreSQL kurulu olsun.
-2. Bir veritabani olustur (ornek: `gallery_db`).
-3. Migration calistir (onerilen):
-   - `C:\xampp\php\php.exe scripts\migrate.php`
-   - veya PATH varsa: `php scripts/migrate.php`
-4. `app/config/config.php` icinde DB ayarlarini duzenle veya env degiskenlerini ayarla:
-   - DB_DRIVER=pgsql
-   - PG_HOST=127.0.0.1
-   - PG_PORT=5432
-   - PG_DATABASE=gallery_db
-   - PG_USER=gallery_user
-   - PG_PASSWORD=gallery_pass
-5. XAMPP Apache ile projeyi `http://localhost/gallery` adresinden ac.
-
-### Migration Nedir? (Kisa)
-
-- Migration, SQL dosyalarinin versiyonlu hali demektir.
-- Bu projede migration dosyalari: `database/postgresql/migrations/*.up.sql`
-- Runner: `scripts/migrate.php`
-- Runner, `schema_migrations` tablosunda hangi dosyanin calistigini tutar.
-- Ayni migration tekrar calismaz; yeni dosya ekledikce sadece yenileri uygulanir.
-
-### Manuel SQL Isteyenler Icin
-
-- Tek seferlik script hala var: `database/postgresql/001_init.sql`
-- Ama migration disiplini icin onerilen yol her zaman `scripts/migrate.php`.
-
-### PostgreSQL Baglanti Formati (DSN)
-
-Bu projede "link" mantigi su formatta kullanilir:
-
-`pgsql:host=127.0.0.1;port=5432;dbname=gallery_db`
-
-Bu deger kodda otomatik olusur. Sen sadece host/port/db/user/password girersin.
-
-## Oracle ile Devam Etmek Istersen
-
-1. DB_DRIVER=oracle yap.
-2. `database/schema.sql` dosyasini calistir.
-3. ORACLE_USER, ORACLE_PASSWORD, ORACLE_DSN degerlerini ayarla.
-
-## Admin Hesabi Olusturma
-
-1. Uygulama uzerinden normal kullanici kaydi yap.
-2. Veritabaninda su komutu calistir:
-
-UPDATE users SET role = 'ADMIN' WHERE LOWER(email) = LOWER('senin-emailin@example.com');
-COMMIT;
-
-## API Ozet
-
-- POST /api/auth/register
-- POST /api/auth/login
-- POST /api/auth/logout
-- GET /api/auth/me
-- GET /api/cars
-- GET /api/cars/{id}
-- GET /api/favorites
-- POST /api/favorites/{carId}
-- DELETE /api/favorites/{carId}
-- POST /api/inquiries
-- GET /api/admin/cars
-- POST /api/admin/cars
-- POST /api/admin/cars/{id}/mark-sold
-- GET /api/admin/inquiries
-- PUT /api/admin/inquiries/{id}
-
-## Frontend Rotalari
-
-- / veya /showroom : Ana vitrin
-- /access : Giris / kayit sayfasi
-- /vehicle/{id} : Arac detay sayfasi
-- /admin : Admin paneli (sadece ADMIN rolu)
-- /playground : Swagger benzeri API test sayfasi (CRUD endpoint test)
-
-## Notlar
-
-- Dosya yukleme bu MVP'de endpoint seviyesinde yok. Simdilik `car_images` tablosuna URL veya path ekleyebilirsiniz.
-- Uretim icin CSRF, rate limit, upload guvenligi ve audit log eklenmelidir.
