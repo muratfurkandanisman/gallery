@@ -9,8 +9,8 @@ return [
         'host' => getenv('PG_HOST') ?: '127.0.0.1',
         'port' => getenv('PG_PORT') ?: '5432',
         'database' => getenv('PG_DATABASE') ?: 'galleryDb',
-        'username' => getenv('PG_USER') ?: 'postgres',
-        'password' => getenv('PG_PASSWORD') ?: '12345',
+        'username' => getenv('PG_USER') ?: '',
+        'password' => getenv('PG_PASSWORD') ?: '',
         'charset' => getenv('PG_CHARSET') ?: 'utf8',
 
         // Oracle fallback settings
