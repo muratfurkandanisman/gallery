@@ -34,8 +34,7 @@
       <div class="overlay"></div>
       <div class="hero-content">
         <p class="kicker">Exhibition 2026</p>
-        <h1>The Art of Velocity</h1>
-        <p>Hesapsiz gez, uye olunca favori ve galerici ile iletisim acilsin.</p>
+        <h1>The Art of FEE CARS</h1>
       </div>
     </section>
 
