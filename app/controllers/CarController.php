@@ -49,7 +49,8 @@ class CarController
 
         $data = Request::input();
         try {
-            $this->service->create($data, Auth::id());
+            // The service create method expects a third parameter; pass null when not provided
+            $this->service->create($data, Auth::id(), null);
             Response::json(['success' => true, 'message' => 'Arac eklendi.']);
         } catch (Throwable $e) {
             Response::error($e->getMessage(), 422);
@@ -96,6 +97,64 @@ class CarController
             Response::json(['success' => true, 'message' => 'Arac kalici olarak silindi.']);
         } catch (Throwable $e) {
             Response::error($e->getMessage(), 422);
+        }
+    }
+
+    public function adminUpload(): void
+    {
+        if (!Auth::isAdmin()) {
+            Response::error('Yetkisiz.', 403);
+        }
+
+        if (!isset($_FILES['file'])) {
+            Response::error('Dosya alanı bulunamadı.', 400);
+        }
+
+        $file = $_FILES['file'];
+
+        // Validate
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            Response::error('Dosya yükleme hatası.', 400);
+        }
+
+        // Check file extension
+        $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        
+        if (!in_array($ext, $allowed)) {
+            Response::error('Sadece resim dosyası yüklenebilir (.jpg, .png, .gif, .webp).', 422);
+        }
+
+        // Limit file size (5MB)
+        if ($file['size'] > 5 * 1024 * 1024) {
+            Response::error('Dosya 5MB dan küçük olmalıdır.', 422);
+        }
+
+        try {
+            $uploadDir = __DIR__ . '/../../public/uploads/cars';
+            
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            // Generate unique filename
+            $filename = uniqid('car_', true) . '.' . $ext;
+            $filepath = $uploadDir . '/' . $filename;
+
+            if (!move_uploaded_file($file['tmp_name'], $filepath)) {
+                Response::error('Dosya kaydedilemedi.', 500);
+            }
+
+            // Return relative path for database
+            $relativePath = '/public/uploads/cars/' . $filename;
+
+            Response::json([
+                'success' => true,
+                'path' => $relativePath,
+                'message' => 'Dosya yüklendi.',
+            ]);
+        } catch (Throwable $e) {
+            Response::error($e->getMessage(), 500);
         }
     }
 }

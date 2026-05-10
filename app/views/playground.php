@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/_init.php'; $baseUrl = $baseUrl ?? env_base_url(); ?>
 <!doctype html>
 <html lang="tr">
 <head>

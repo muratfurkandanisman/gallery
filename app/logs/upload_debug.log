@@ -1,0 +1,26 @@
+--- adminUpdate (carId: 17) ---
+Array
+(
+    [_FILES] => Array
+        (
+        )
+
+    [Request::files] => Array
+        (
+        )
+
+    [input] => Array
+        (
+            [brand] => 3
+            [model] => 11
+            [year] => 11
+            [price] => 1
+            [mileage] => 1
+            [fuel_type] => 1
+            [gear_type] => 11
+            [color] => 1
+            [status] => AVAILABLE
+            [description] => 1
+        )
+
+)

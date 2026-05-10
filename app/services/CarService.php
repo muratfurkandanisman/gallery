@@ -38,12 +38,16 @@ class CarService
     {
         $this->assertRequiredFields($data);
 
+        $data['images'] = $this->normalizeImages($data['images'] ?? null);
+
         $this->cars->create($data, $adminId);
     }
 
     public function update(int $carId, array $data): void
     {
         $this->assertRequiredFields($data);
+
+        $data['images'] = $this->normalizeImages($data['images'] ?? null);
 
         $status = strtoupper(trim((string) ($data['status'] ?? 'AVAILABLE')));
         if (!in_array($status, ['AVAILABLE', 'SOLD'], true)) {
@@ -60,6 +64,7 @@ class CarService
             'gear_type' => trim((string) ($data['gear_type'] ?? '')),
             'color' => trim((string) ($data['color'] ?? '')),
             'description' => trim((string) ($data['description'] ?? '')),
+            'images' => $data['images'],
             'status' => $status,
         ];
 
@@ -86,5 +91,30 @@ class CarService
                 throw new InvalidArgumentException('Eksik alan: ' . $field);
             }
         }
+    }
+
+    private function normalizeImages(mixed $images): string
+    {
+        if (is_array($images)) {
+            $items = $images;
+        } else {
+            $raw = trim((string) $images);
+            if ($raw === '') {
+                return '[]';
+            }
+
+            $items = preg_split('/[\r\n,]+/', $raw) ?: [];
+        }
+
+        $normalized = [];
+        foreach ($items as $item) {
+            $url = trim((string) $item);
+            if ($url === '') {
+                continue;
+            }
+            $normalized[] = $url;
+        }
+
+        return json_encode(array_values(array_unique($normalized)), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?: '[]';
     }
 }

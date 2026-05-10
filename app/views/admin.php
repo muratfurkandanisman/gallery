@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/_init.php'; $baseUrl = $baseUrl ?? env_base_url(); ?>
 <!doctype html>
 <html lang="tr" class="theme-dark">
 <head>
@@ -60,6 +61,12 @@
         <input id="aFuel" placeholder="Yakit">
         <input id="aGear" placeholder="Vites">
         <input id="aColor" placeholder="Renk">
+        <div style="grid-column: 1 / -1;">
+          <input id="adminImageFileInput" type="file" accept="image/*" multiple style="display: none;">
+          <button type="button" id="adminImageUploadBtn" class="btn btn-primary" style="margin-bottom: 8px;">Resim Sec</button>
+          <textarea id="aImages" placeholder="Gorsel URL(leri). Virgulle veya alt alta yazabilirsiniz."
+            rows="3"></textarea>
+        </div>
         <input id="aDesc" placeholder="Aciklama">
         <button class="btn btn-primary" type="submit">Arac Ekle</button>
       </form>

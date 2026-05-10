@@ -88,18 +88,18 @@ class CarRepository
     {
         if ($this->db->isOracle()) {
             $sql = "INSERT INTO cars (
-                        car_id, brand, model, year, price, mileage, fuel_type, gear_type, color, description,
+                        car_id, brand, model, year, price, mileage, fuel_type, gear_type, color, description, images,
                         status, created_by, created_at, updated_at, is_deleted
                     ) VALUES (
-                        cars_seq.NEXTVAL, :brand, :model, :year, :price, :mileage, :fuel_type, :gear_type, :color, :description,
+                        cars_seq.NEXTVAL, :brand, :model, :year, :price, :mileage, :fuel_type, :gear_type, :color, :description, :images,
                         'AVAILABLE', :created_by, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
                     )";
         } else {
             $sql = "INSERT INTO cars (
-                        brand, model, year, price, mileage, fuel_type, gear_type, color, description,
+                        brand, model, year, price, mileage, fuel_type, gear_type, color, description, images,
                         status, created_by, created_at, updated_at, is_deleted
                     ) VALUES (
-                        :brand, :model, :year, :price, :mileage, :fuel_type, :gear_type, :color, :description,
+                        :brand, :model, :year, :price, :mileage, :fuel_type, :gear_type, :color, :description, :images,
                         'AVAILABLE', :created_by, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
                     )";
         }
@@ -114,6 +114,7 @@ class CarRepository
             'gear_type' => $data['gear_type'] ?? null,
             'color' => $data['color'] ?? null,
             'description' => $data['description'] ?? null,
+            'images' => $data['images'] ?? '[]',
             'created_by' => $adminId,
         ]);
     }
@@ -141,6 +142,7 @@ class CarRepository
                     gear_type = :gear_type,
                     color = :color,
                     description = :description,
+                    images = :images,
                     status = :status,
                     sold_at = {$soldAtSql},
                     updated_at = CURRENT_TIMESTAMP
@@ -157,6 +159,7 @@ class CarRepository
             'gear_type' => $data['gear_type'] !== '' ? $data['gear_type'] : null,
             'color' => $data['color'] !== '' ? $data['color'] : null,
             'description' => $data['description'] !== '' ? $data['description'] : null,
+            'images' => $data['images'] ?? '[]',
             'status' => $data['status'],
         ]);
     }

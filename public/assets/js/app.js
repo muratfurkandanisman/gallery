@@ -77,6 +77,13 @@ function esc(value) {
     .replaceAll("'", '&#039;');
 }
 
+function parseImageUrls(value) {
+  return String(value || '')
+    .split(/[\r\n,]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 function favoriteHeartButton(carId, active, extraClass = '') {
   const stateClass = active ? 'is-favorite' : 'is-empty';
   const label = active ? 'Favoriden cikar' : 'Favoriye ekle';
@@ -165,11 +172,27 @@ function renderShowroomCars() {
   const canUseFavorites = !!(state.user && state.user.permissions?.can_use_favorites);
   const showFavoriteAction = !state.user || canUseFavorites;
 
+  // Debug: Log image paths
+  console.log('Showroom Cars:', state.cars.map(car => ({
+    id: car.CAR_ID,
+    brand: car.BRAND,
+    imagePath: car.IMAGE_PATH,
+    allImages: car.IMAGES
+  })));
+
   grid.innerHTML = state.cars.map((car) => {
     const fav = state.favorites.some((f) => Number(f.CAR_ID) === Number(car.CAR_ID));
+    const base = window.BASE_URL || '';
+    let imgSrc = car.IMAGE_PATH ? car.IMAGE_PATH : null;
+    if (imgSrc && !imgSrc.startsWith('http')) {
+      imgSrc = base + imgSrc;
+    }
+    if (!imgSrc) {
+      imgSrc = 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80';
+    }
     return `
       <article class="car-card">
-        <img src="${esc(car.IMAGE_PATH || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80')}" alt="${esc(car.BRAND)} ${esc(car.MODEL)}">
+        <img src="${imgSrc}" alt="${esc(car.BRAND)} ${esc(car.MODEL)}">
         <div class="car-body">
           <div class="row-between">
             <strong>${esc(car.BRAND)} ${esc(car.MODEL)}</strong>
@@ -337,8 +360,21 @@ async function initDetail() {
   const data = await api(`/api/cars/${window.CAR_ID}`);
   const c = data.data;
 
+  // Debug: Log image data
+  console.log('Car Details - IMAGES:', c.IMAGES);
+  console.log('Car Details - Raw car object:', c);
+
   const images = (c.IMAGES || []).map((x) => x.IMAGE_PATH).filter(Boolean);
-  const hero = images[0] || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1600&q=80';
+  const base = window.BASE_URL || '';
+  let hero = images[0] ? images[0] : null;
+  if (hero && !hero.startsWith('http')) {
+    hero = base + hero;
+  }
+  if (!hero) {
+    hero = 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1600&q=80';
+  }
+
+  console.log('Final hero image src:', hero);
 
   const upperTitle = `${c.BRAND || ''} ${c.MODEL || ''}`.trim().toUpperCase();
   const isFavorite = state.favorites.some((f) => Number(f.CAR_ID) === Number(c.CAR_ID));
@@ -613,6 +649,13 @@ async function initAdmin() {
   }
 
   await loadAdminCars();
+  
+  // Debug: Log loaded cars to check image paths
+  console.log('Admin Cars:', state.adminCars.map(car => ({
+    id: car.CAR_ID,
+    brand: car.BRAND,
+    images: car.IMAGES
+  })));
   await loadAdminInquiries();
 
   $$('.admin-tab').forEach((btn) => {
@@ -676,6 +719,61 @@ async function initAdmin() {
     }
   });
 
+  // File upload handler for admin form
+  $('#adminImageUploadBtn')?.addEventListener('click', () => {
+    $('#adminImageFileInput')?.click();
+  });
+
+  $('#adminImageFileInput')?.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    for (const file of files) {
+      try {
+        console.log('Uploading file:', file.name, 'size:', file.size, 'type:', file.type);
+        
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const base = window.BASE_URL || '';
+        const uploadUrl = `${base}/api/admin/upload`;
+        console.log('Upload URL:', uploadUrl);
+        
+        const res = await fetch(uploadUrl, {
+          method: 'POST',
+          body: formData,
+          credentials: 'same-origin',
+        });
+
+        console.log('Upload response status:', res.status);
+        
+        if (!res.ok) {
+          const error = await res.json().catch(() => ({}));
+          console.error('Upload error response:', error);
+          throw new Error(error.message || 'Yükleme başarısız');
+        }
+
+        const data = await res.json();
+        console.log('Upload success response:', data);
+        
+        if (data.success) {
+          const currentValue = $('#aImages').value.trim();
+          $('#aImages').value = currentValue ? currentValue + '\n' + data.path : data.path;
+          console.log('Added to textarea:', data.path);
+        } else {
+          throw new Error(data.message || 'Yükleme başarısız');
+        }
+      } catch (err) {
+        console.error('Upload error:', err);
+        toast(`Hata: ${err.message}`);
+      }
+    }
+    
+    // Reset file input
+    e.target.value = '';
+    toast('Resimler yüklendi.');
+  });
+
   $('#adminCarForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const payload = {
@@ -687,6 +785,7 @@ async function initAdmin() {
       fuel_type: $('#aFuel').value.trim(),
       gear_type: $('#aGear').value.trim(),
       color: $('#aColor').value.trim(),
+      images: parseImageUrls($('#aImages').value),
       description: $('#aDesc').value.trim(),
     };
 
@@ -726,12 +825,68 @@ async function initAdminEdit() {
     $('#eFuel').value = car.FUEL_TYPE || '';
     $('#eGear').value = car.GEAR_TYPE || '';
     $('#eColor').value = car.COLOR || '';
+    $('#eImages').value = (car.IMAGES || []).map((img) => img.IMAGE_PATH).filter(Boolean).join('\n');
     $('#eStatus').value = car.STATUS || 'AVAILABLE';
     $('#eDesc').value = car.DESCRIPTION || '';
   } catch (err) {
     toast(err.message);
     return;
   }
+
+  // File upload handler
+  $('#imageUploadBtn')?.addEventListener('click', () => {
+    $('#imageFileInput')?.click();
+  });
+
+  $('#imageFileInput')?.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    for (const file of files) {
+      try {
+        console.log('Uploading file (edit):', file.name, 'size:', file.size, 'type:', file.type);
+        
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const base = window.BASE_URL || '';
+        const uploadUrl = `${base}/api/admin/upload`;
+        console.log('Upload URL:', uploadUrl);
+        
+        const res = await fetch(uploadUrl, {
+          method: 'POST',
+          body: formData,
+          credentials: 'same-origin',
+        });
+
+        console.log('Upload response status:', res.status);
+        
+        if (!res.ok) {
+          const error = await res.json().catch(() => ({}));
+          console.error('Upload error response:', error);
+          throw new Error(error.message || 'Yükleme başarısız');
+        }
+
+        const data = await res.json();
+        console.log('Upload success response:', data);
+        
+        if (data.success) {
+          const currentValue = $('#eImages').value.trim();
+          $('#eImages').value = currentValue ? currentValue + '\n' + data.path : data.path;
+          console.log('Added to textarea:', data.path);
+        } else {
+          throw new Error(data.message || 'Yükleme başarısız');
+        }
+      } catch (err) {
+        console.error('Upload error:', err);
+        toast(`Hata: ${err.message}`);
+      }
+    }
+    
+    // Reset file input
+    e.target.value = '';
+    toast('Resimler yüklendi.');
+  });
 
   $('#adminEditCarForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -745,6 +900,7 @@ async function initAdminEdit() {
       fuel_type: $('#eFuel').value.trim(),
       gear_type: $('#eGear').value.trim(),
       color: $('#eColor').value.trim(),
+      images: parseImageUrls($('#eImages').value),
       status: $('#eStatus').value,
       description: $('#eDesc').value.trim(),
     };

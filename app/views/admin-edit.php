@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/_init.php'; $baseUrl = $baseUrl ?? env_base_url(); ?>
 <!doctype html>
 <html lang="tr" class="theme-dark">
 <head>
@@ -67,6 +68,13 @@
         <div class="field-hint-wrap">
           <input id="eColor" placeholder="Renk">
           <span class="field-hint">RENK</span>
+        </div>
+        <div class="field-hint-wrap field-hint-full">
+          <input id="imageFileInput" type="file" accept="image/*" multiple style="display: none;">
+          <button type="button" id="imageUploadBtn" class="btn btn-primary" style="margin-bottom: 8px;">Resim Sec</button>
+          <textarea id="eImages" placeholder="Gorsel URL(leri). Virgulle veya alt alta yazabilirsiniz."
+            rows="3"></textarea>
+          <span class="field-hint">GORSEL</span>
         </div>
         <div class="field-hint-wrap">
           <select id="eStatus">

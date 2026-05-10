@@ -116,6 +116,10 @@ if (isApiPath($path)) {
 				$inquiryController->adminUpdateStatus((int) $m[1]);
 		}
 
+		if ($path === '/api/admin/upload' && $method === 'POST') {
+				$carController->adminUpload();
+		}
+
 		Response::error('Endpoint bulunamadi.', 404);
 }
 
