@@ -45,4 +45,24 @@ class Request
     {
         return array_merge($_GET ?? [], $_POST ?? [], self::json());
     }
+
+    public static function ip(): string
+    {
+        // Check for IP from shared internet
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
+        // Check for IP passed from proxy
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            // Handle multiple IPs separated by comma (take the first one)
+            $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = trim($ips[0]);
+        }
+        // Check for remote address
+        else {
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        }
+
+        return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '0.0.0.0';
+    }
 }

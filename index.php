@@ -36,8 +36,9 @@ if (isApiPath($path)) {
 		$favRepo = new FavoriteRepository($db);
 		$inqRepo = new InquiryRepository($db);
 		$chatRepo = new ChatRepository($db);
+	$logRepo = new LogRepository($db);
 
-		$authController = new AuthController(new AuthService($userRepo));
+	$authController = new AuthController(new AuthService($userRepo), $logRepo);
 		$carController = new CarController(new CarService($carRepo));
 		$favoriteController = new FavoriteController(new FavoriteService($favRepo, $carRepo));
 		$inquiryController = new InquiryController(new InquiryService($inqRepo, $carRepo));

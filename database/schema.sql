@@ -45,6 +45,16 @@ BEGIN
 EXCEPTION WHEN OTHERS THEN NULL;
 END;
 /
+BEGIN
+  EXECUTE IMMEDIATE 'DROP TABLE user_activity_logs CASCADE CONSTRAINTS';
+EXCEPTION WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
+  EXECUTE IMMEDIATE 'DROP SEQUENCE logs_seq';
+EXCEPTION WHEN OTHERS THEN NULL;
+END;
+/
 
 CREATE TABLE users (
   user_id NUMBER PRIMARY KEY,
@@ -114,15 +124,29 @@ CREATE TABLE inquiries (
   CONSTRAINT chk_inq_status CHECK (status IN ('NEW', 'IN_PROGRESS', 'CLOSED'))
 );
 
+CREATE TABLE user_activity_logs (
+  log_id NUMBER PRIMARY KEY,
+  user_id NUMBER,
+  action VARCHAR2(30) NOT NULL,
+  details CLOB,
+  created_at TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
+  CONSTRAINT fk_logs_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL,
+  CONSTRAINT chk_logs_action CHECK (action IN ('LOGIN', 'LOGOUT', 'FAILED_LOGIN', 'ACTION'))
+);
+
 CREATE SEQUENCE users_seq START WITH 1 INCREMENT BY 1 NOCACHE;
 CREATE SEQUENCE cars_seq START WITH 1 INCREMENT BY 1 NOCACHE;
 CREATE SEQUENCE car_images_seq START WITH 1 INCREMENT BY 1 NOCACHE;
 CREATE SEQUENCE inquiries_seq START WITH 1 INCREMENT BY 1 NOCACHE;
+CREATE SEQUENCE logs_seq START WITH 1 INCREMENT BY 1 NOCACHE;
 
 CREATE INDEX idx_cars_status ON cars(status);
 CREATE INDEX idx_cars_brand_model ON cars(brand, model);
 CREATE INDEX idx_cars_price ON cars(price);
 CREATE INDEX idx_cars_year ON cars(year);
 CREATE INDEX idx_inquiries_status ON inquiries(status);
+CREATE INDEX idx_logs_user_id ON user_activity_logs(user_id);
+CREATE INDEX idx_logs_created_at ON user_activity_logs(created_at);
+CREATE INDEX idx_logs_action ON user_activity_logs(action);
 
 COMMIT;

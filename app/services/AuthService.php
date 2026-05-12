@@ -31,15 +31,22 @@ class AuthService
     public function login(string $email, string $password): array
     {
         $user = $this->users->findByEmail($email);
-        if (!$user || (int) $user['IS_ACTIVE'] !== 1) {
+        if (!$user) {
             throw new InvalidArgumentException('Kullanici bulunamadi veya pasif.');
         }
 
-        if (!password_verify($password, $user['PASSWORD_HASH'])) {
+        // Normalize keys to lowercase for consistent access across app
+        $user = array_change_key_case($user, CASE_LOWER);
+
+        if ((int) ($user['is_active'] ?? 0) !== 1) {
+            throw new InvalidArgumentException('Kullanici bulunamadi veya pasif.');
+        }
+
+        if (!password_verify($password, $user['password_hash'])) {
             throw new InvalidArgumentException('E-posta veya sifre hatali.');
         }
 
-        $this->users->updateLastLogin((int) $user['USER_ID']);
+        $this->users->updateLastLogin((int) $user['user_id']);
         return $user;
     }
 }

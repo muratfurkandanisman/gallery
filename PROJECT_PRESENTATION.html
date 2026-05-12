@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Araç Galerisi Yönetim Sistemi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .page {
+            width: 210mm;
+            height: 297mm;
+            margin: 20px auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            page-break-after: always;
+        }
+        
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 100%;
+        }
+        
+        .logo-area {
+            font-size: 60px;
+            margin-bottom: 30px;
+            color: #2196F3;
+        }
+        
+        h1 {
+            font-size: 48px;
+            color: #1565C0;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+        
+        .date-author {
+            margin-top: 60px;
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .divider {
+            width: 100px;
+            height: 4px;
+            background: #2196F3;
+            margin: 30px auto;
+        }
+        
+        h2 {
+            font-size: 32px;
+            color: #1565C0;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #2196F3;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            font-size: 18px;
+            color: #2196F3;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .content-section {
+            margin-bottom: 30px;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .feature-box {
+            background: #E3F2FD;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .tech-item {
+            background: #F5F5F5;
+            padding: 15px;
+            border-radius: 4px;
+            border-top: 3px solid #2196F3;
+        }
+        
+        .tech-item strong {
+            color: #1565C0;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .architecture-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .architecture-table th {
+            background: #2196F3;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .architecture-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            background: #FAFAFA;
+        }
+        
+        .architecture-table tr:nth-child(even) td {
+            background: white;
+        }
+        
+        .module-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            break-inside: avoid;
+        }
+        
+        .module-card h4 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .module-card p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            margin: 0;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            background: #E8F5E9;
+            padding: 12px;
+            border-radius: 4px;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        
+        .page-number {
+            text-align: right;
+            color: #999;
+            font-size: 12px;
+            margin-top: 30px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .page {
+                margin: 0;
+                box-shadow: none;
+                width: 210mm;
+                height: auto;
+                min-height: 297mm;
+                page-break-after: always;
+                break-after: page;
+            }
+            .page:last-child {
+                page-break-after: auto;
+                break-after: auto;
+            }
+        }
+        
+        .highlight {
+            background: #FFF9C4;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .api-endpoint {
+            background: #F5F5F5;
+            border-left: 3px solid #FF9800;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        
+        .db-feature {
+            background: #F3E5F5;
+            border-left: 3px solid #9C27B0;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SAYFA 1: KAPAK -->
+<div class="page cover-page">
+    <div class="logo-area">🚗</div>
+    <h1>GALLERY</h1>
+    <div class="subtitle">Araç Galerisi Yönetim Sistemi</div>
+    <p style="color: #999; font-size: 16px;">Profesyonel Araç Satış Platformu</p>
+    <div class="divider"></div>
+    <div class="date-author">
+        <p>Proje Sunumu</p>
+        <p>Mayıs 2026</p>
+    </div>
+</div>
+
+<!-- SAYFA 2: PROJE ÖZETİ -->
+<div class="page">
+    <h2>📋 Proje Özeti</h2>
+    
+    <div class="content-section">
+        <h3>Proje Tanımı</h3>
+        <p>Gallery, modern web teknolojileri kullanarak geliştirilmiş, tam işlevsel bir araç galerisi yönetim sistemidir. Müşterilerin araçları listeleyebileceği, favorilere ekleyebileceği, satıcılarla mesajlaşabileceği ve araç hakkında sorular sorabileceği kullanıcı dostu bir platformdur.</p>
+    </div>
+    
+    <div class="content-section">
+        <h3>Temel Amaçlar</h3>
+        <ul>
+            <li><strong>Araç Listesi Yönetimi:</strong> Kullanıcıların araçları kolay bir şekilde listeleyip yönetmesi</li>
+            <li><strong>Müşteri İşlemleri:</strong> Müşterilerin araçları arayabileceği ve favorilere ekleyebileceği sistem</li>
+            <li><strong>Gerçek Zamanlı İletişim:</strong> Satıcı ve alıcı arasında sohbet özelliği</li>
+            <li><strong>Esneklik:</strong> Filtreleme, arama ve gelişmiş sorgu seçenekleri</li>
+            <li><strong>Güvenlik:</strong> Rol tabanlı erişim kontrolü ve veri koruması</li>
+        </ul>
+    </div>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 2</p>
+    </div>
+</div>
+
+<!-- SAYFA 3: TEMEL ÖZELLİKLER -->
+<div class="page">
+    <h2>✨ Temel Özellikler</h2>
+    
+    <div class="feature-list">
+        <div class="feature-item">
+            <strong>👤 Kullanıcı Yönetimi</strong>
+            <p>Kayıt, giriş, profil yönetimi ve rol tabanlı erişim</p>
+        </div>
+        <div class="feature-item">
+            <strong>🚗 Araç Yönetimi</strong>
+            <p>Araç ekleme, düzenleme, silme ve detaylı bilgiler</p>
+        </div>
+        <div class="feature-item">
+            <strong>📷 Galeri Sistemi</strong>
+            <p>Her araç için birden fazla resim ve sıralama</p>
+        </div>
+        <div class="feature-item">
+            <strong>❤️ Favoriler</strong>
+            <p>Kullanıcıların beğendikleri araçları kaydetmesi</p>
+        </div>
+        <div class="feature-item">
+            <strong>💬 Mesajlaşma</strong>
+            <p>Satıcı ve alıcı arasında gerçek zamanlı sohbet</p>
+        </div>
+        <div class="feature-item">
+            <strong>❓ Sorular & Cevaplar</strong>
+            <p>Müşterilerin araçlar hakkında soru sorması</p>
+        </div>
+        <div class="feature-item">
+            <strong>🔍 Gelişmiş Arama</strong>
+            <p>Marka, model, fiyat ve diğer kriterlere göre filtreleme</p>
+        </div>
+        <div class="feature-item">
+            <strong>🛡️ Güvenlik</strong>
+            <p>Şifreli oturum yönetimi ve otentikasyon</p>
+        </div>
+        <div class="feature-item">
+            <strong>📊 Aktivite Takibi</strong>
+            <p>Kullanıcı giriş/çıkış kayıtları ve audit trail</p>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 3</p>
+    </div>
+</div>
+
+<!-- SAYFA 4: TEKNOLOJİ STACK -->
+<div class="page">
+    <h2>🛠️ Teknoloji Stack</h2>
+    
+    <div class="tech-stack">
+        <div class="tech-item">
+            <strong>Backend</strong>
+            <p>PHP 8+ (Nesne Yönelimli Programlama)</p>
+        </div>
+        <div class="tech-item">
+            <strong>Veritabanı</strong>
+            <p>PostgreSQL (İlişkisel Veritabanı)</p>
+        </div>
+        <div class="tech-item">
+            <strong>Frontend</strong>
+            <p>HTML5, CSS3, JavaScript (Vanilla)</p>
+        </div>
+        <div class="tech-item">
+            <strong>API</strong>
+            <p>RESTful API (JSON Response)</p>
+        </div>
+        <div class="tech-item">
+            <strong>Sunucu</strong>
+            <p>XAMPP (Apache + PHP)</p>
+        </div>
+        <div class="tech-item">
+            <strong>Versiyon Kontrol</strong>
+            <p>Git & GitHub</p>
+        </div>
+    </div>
+    
+    <h3>Mimari Deseni</h3>
+    <p>Proje <span class="highlight">MVC (Model-View-Controller)</span> tasarım deseni kullanır:</p>
+    
+    <table class="architecture-table">
+        <tr>
+            <th>Katman</th>
+            <th>Açıklama</th>
+        </tr>
+        <tr>
+            <td><strong>Model</strong></td>
+            <td>Repositories ve Services - İş mantığı ve veri yönetimi</td>
+        </tr>
+        <tr>
+            <td><strong>View</strong></td>
+            <td>PHP şablonları ve HTML - Kullanıcı arayüzü</td>
+        </tr>
+        <tr>
+            <td><strong>Controller</strong></td>
+            <td>HTTP isteklerini işleme - İstek ve yanıt yönetimi</td>
+        </tr>
+    </table>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 4</p>
+    </div>
+</div>
+
+<!-- SAYFA 5: DİZİN YAPISI -->
+<div class="page">
+    <h2>📁 Proje Dizin Yapısı</h2>
+    
+    <div class="content-section">
+        <h3>Ana Yapı</h3>
+        <div class="feature-box">
+            <strong>app/</strong> - Uygulama mantığı<br>
+            <strong>public/</strong> - Statik dosyalar (CSS, JS, resimler)<br>
+            <strong>database/</strong> - Veritabanı şemaları ve migrasyonlar<br>
+            <strong>scripts/</strong> - Yönetim komut dosyaları
+        </div>
+    </div>
+    
+    <div class="content-section">
+        <h3>App Klasörleri</h3>
+        <div class="db-feature">
+            <strong>controllers/</strong> - HTTP isteklerini işleyen kontrolörler<br>
+            AuthController, CarController, ChatController, FavoriteController, InquiryController
+        </div>
+        <div class="db-feature">
+            <strong>services/</strong> - İş mantığı ve veri işleme<br>
+            AuthService, CarService, ChatService, FavoriteService, InquiryService
+        </div>
+        <div class="db-feature">
+            <strong>repositories/</strong> - Veritabanı erişim katmanı<br>
+            UserRepository, CarRepository, ChatRepository, FavoriteRepository, InquiryRepository
+        </div>
+        <div class="db-feature">
+            <strong>core/</strong> - Temel sınıflar ve araçlar<br>
+            Auth, Request, Response, Helpers
+        </div>
+        <div class="db-feature">
+            <strong>config/</strong> - Yapılandırma dosyaları<br>
+            config.php, database.php
+        </div>
+        <div class="db-feature">
+            <strong>views/</strong> - UI şablonları<br>
+            showroom.php, detail.php, admin.php, messages.php vb.
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 5</p>
+    </div>
+</div>
+
+<!-- SAYFA 6: VERITABANI MODELI - DETAYLI -->
+<div class="page">
+    <h2>💾 Veritabanı Modeli - Detaylı Yapı</h2>
+    
+    <h3>📋 7 Ana Entity Tablosu</h3>
+    
+    <div class="db-feature" style="background: #FFE0B2; border-left-color: #FF9800;">
+        <strong>🔑 users (8 Alan)</strong><br>
+        <code>user_id</code> (PK) | <code>full_name</code> (VARCHAR 120) | <code>email</code> (VARCHAR 180, UNIQUE) |<br>
+        <code>password_hash</code> (VARCHAR 255) | <code>role</code> (USER/ADMIN) | <code>created_at</code> | <code>last_login_at</code> (NULL) | <code>is_active</code> (0/1)
+    </div>
+    
+    <div class="db-feature" style="background: #E1F5FE; border-left-color: #2196F3;">
+        <strong>🚗 cars (14 Alan - images JSON içerir)</strong><br>
+        <code>car_id</code> (PK) | <code>brand</code>, <code>model</code>, <code>year</code> | <code>price</code> (NUMERIC 12,2) | <code>mileage</code> |<br>
+        <code>fuel_type</code>, <code>gear_type</code>, <code>color</code> | <code>description</code> (TEXT) | <code>images</code> (JSON - resim listesi) |<br>
+        <code>status</code> (AVAILABLE/SOLD) | <code>created_by</code> (FK users) | <code>created_at</code>, <code>updated_at</code> | <code>sold_at</code> (NULL) | <code>is_deleted</code> (0/1)
+    </div>
+    
+    <div class="db-feature" style="background: #E8F5E9; border-left-color: #4CAF50;">
+        <strong>❤️ favorites (3 Alan - Composite PK)</strong><br>
+        <code>user_id</code> (FK users, PK) ◆ <code>car_id</code> (FK cars, PK) ◆ <code>created_at</code> (TIMESTAMP)<br>
+        <strong>Özel:</strong> Bileşik anahtar (user_id, car_id) - CASCADE DELETE
+    </div>
+    
+    <div class="db-feature" style="background: #FCE4EC; border-left-color: #E91E63;">
+        <strong>❓ inquiries (8 Alan)</strong><br>
+        <code>inquiry_id</code> (PK) | <code>user_id</code> (FK users - soru soran) | <code>car_id</code> (FK cars) |<br>
+        <code>message</code> (TEXT) | <code>status</code> (NEW/IN_PROGRESS/CLOSED) | <code>created_at</code> |<br>
+        <code>handled_by</code> (FK users, NULL - admin cevaplar) | <code>handled_at</code> (NULL)
+    </div>
+    
+    <div class="db-feature" style="background: #F1F8E9; border-left-color: #689F38;">
+        <strong>💬 chat_conversations (7 Alan)</strong><br>
+        <code>conversation_id</code> (PK) | <code>user_id</code> (FK users - ON DELETE CASCADE) | <code>car_id</code> (FK cars - ON DELETE CASCADE) |<br>
+        <code>status</code> (OPEN/CLOSED) | <code>created_at</code> | <code>updated_at</code> | <code>last_message_at</code> (DESC INDEX)<br>
+        <strong>Özel:</strong> UNIQUE(user_id, car_id) - Her araç-kullanıcı çifti sadece 1 konuşma
+    </div>
+    
+    <div class="db-feature" style="background: #E0F2F1; border-left-color: #009688;">
+        <strong>✉️ chat_messages (7 Alan)</strong><br>
+        <code>message_id</code> (PK) | <code>conversation_id</code> (FK chat_conversations - ON DELETE CASCADE) |<br>
+        <code>sender_id</code> (FK users - ON DELETE CASCADE) | <code>sender_role</code> (USER/ADMIN) |<br>
+        <code>message_text</code> (TEXT) | <code>is_read</code> (0/1) | <code>created_at</code>
+    </div>
+
+    <div class="db-feature" style="background: #F3E5F5; border-left-color: #9C27B0;">
+        <strong>📝 user_activity_logs (6 Alan) - YENİ!</strong><br>
+        <code>log_id</code> (PK) | <code>user_id</code> (FK users, NULL - başarısız girişler) | <code>action</code> (LOGIN/LOGOUT/FAILED_LOGIN/ACTION) |<br>
+        <code>ip_address</code> (VARCHAR 45) | <code>user_agent</code> (VARCHAR 500) | <code>details</code> (JSON) | <code>created_at</code> (TIMESTAMP)<br>
+        <strong>Amaç:</strong> Kullanıcı giriş/çıkış aktivitelerini ve güvenlik olaylarını takip etmek
+    </div>
+    
+    <div class="content-section" style="margin-top: 20px;">
+        <h3>🔧 Veritabanı Özellikleri</h3>
+        <ul style="font-size: 13px;">
+            <li>✅ <strong>Foreign Key İlişkileri:</strong> Veri bütünlüğü sağlanır</li>
+            <li>✅ <strong>ON DELETE CASCADE:</strong> Silinmiş kayıtlar otomatik kısıtlandırılır</li>
+            <li>✅ <strong>TIMESTAMP:</strong> Otomatik zaman damgaları DEFAULT CURRENT_TIMESTAMP</li>
+            <li>✅ <strong>Soft Delete:</strong> cars.is_deleted alanı</li>
+            <li>✅ <strong>BIGSERIAL:</strong> Büyük ID'ler için (1-9 milyar+)</li>
+            <li>✅ <strong>UNIQUE Constraints:</strong> Email benzersiz, chat UNIQUE(user_id, car_id)</li>
+            <li>✅ <strong>CHECK Constraints:</strong> Geçerli enum değerleri kontrol (role, status vb.)</li>
+            <li>✅ <strong>Index Optimizasyonu:</strong> Hızlı sorgulamalar için</li>
+        </ul>
+    </div>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 6</p>
+    </div>
+</div>
+
+<!-- SAYFA 7: ENTITY RELATIONSHIP DIAGRAM (ERD) -->
+<div class="page">
+    <h2>🔗 Entity Relationship Diagram (ERD) - Doğru Yapı</h2>
+    
+    <div style="margin-top: 20px; overflow-x: auto;">
+        <svg viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; border: 1px solid #ddd;">
+            <!-- USERS Tablosu (Merkez) -->
+            <rect x="450" y="20" width="200" height="180" fill="#FFE0B2" stroke="#FF9800" stroke-width="2.5" rx="4"/>
+            <rect x="450" y="20" width="200" height="30" fill="#FF9800" rx="4"/>
+            <text x="550" y="42" text-anchor="middle" fill="white" font-weight="bold" font-size="14">🔑 users</text>
+            <line x1="450" y1="50" x2="650" y2="50" stroke="#FF9800" stroke-width="1.5"/>
+            
+            <text x="465" y="70" font-size="11" font-weight="600">user_id (PK)</text>
+            <text x="465" y="87" font-size="10">full_name VARCHAR(120)</text>
+            <text x="465" y="102" font-size="10">email VARCHAR(180) UNIQUE</text>
+            <text x="465" y="117" font-size="10">password_hash VARCHAR(255)</text>
+            <text x="465" y="132" font-size="10">role: USER | ADMIN</text>
+            <text x="465" y="147" font-size="10">created_at, last_login_at</text>
+            <text x="465" y="162" font-size="10">is_active: 0 | 1</text>
+            <text x="465" y="177" font-size="10">+ attributes</text>
+            
+            <!-- CARS Tablosu (Sağ üst) -->
+            <rect x="800" y="50" width="220" height="200" fill="#E1F5FE" stroke="#2196F3" stroke-width="2.5" rx="4"/>
+            <rect x="800" y="50" width="220" height="30" fill="#2196F3" rx="4"/>
+            <text x="910" y="72" text-anchor="middle" fill="white" font-weight="bold" font-size="14">🚗 cars</text>
+            <line x1="800" y1="80" x2="1020" y2="80" stroke="#2196F3" stroke-width="1.5"/>
+            
+            <text x="815" y="100" font-size="11" font-weight="600">car_id (PK)</text>
+            <text x="815" y="115" font-size="10">brand, model, year</text>
+            <text x="815" y="130" font-size="10">price, mileage</text>
+            <text x="815" y="145" font-size="10">fuel_type, gear_type, color</text>
+            <text x="815" y="160" font-size="10">description, status</text>
+            <text x="815" y="175" font-size="10">images (JSON): resim listesi</text>
+            <text x="815" y="190" font-size="10">🔗 created_by → users</text>
+            <text x="815" y="205" font-size="10">created_at, updated_at</text>
+            <text x="815" y="220" font-size="10">sold_at, is_deleted</text>
+            
+            <!-- FAVORITES Tablosu (Sol alt) -->
+            <rect x="80" y="340" width="220" height="140" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2.5" rx="4"/>
+            <rect x="80" y="340" width="220" height="30" fill="#4CAF50" rx="4"/>
+            <text x="190" y="362" text-anchor="middle" fill="white" font-weight="bold" font-size="14">❤️ favorites</text>
+            <line x1="80" y1="370" x2="300" y2="370" stroke="#4CAF50" stroke-width="1.5"/>
+            
+            <text x="95" y="390" font-size="11" font-weight="600">🔗 user_id (PK, FK)</text>
+            <text x="95" y="405" font-size="10">→ users(user_id)</text>
+            <text x="95" y="422" font-size="11" font-weight="600">🔗 car_id (PK, FK)</text>
+            <text x="95" y="437" font-size="10">→ cars(car_id)</text>
+            <text x="95" y="452" font-size="10">created_at: TIMESTAMP</text>
+            <text x="95" y="467" font-size="10">(Composite Primary Key)</text>
+            
+            <!-- INQUIRIES Tablosu (Ortada alt) -->
+            <rect x="400" y="340" width="220" height="160" fill="#FCE4EC" stroke="#E91E63" stroke-width="2.5" rx="4"/>
+            <rect x="400" y="340" width="220" height="30" fill="#E91E63" rx="4"/>
+            <text x="510" y="362" text-anchor="middle" fill="white" font-weight="bold" font-size="14">❓ inquiries</text>
+            <line x1="400" y1="370" x2="620" y2="370" stroke="#E91E63" stroke-width="1.5"/>
+            
+            <text x="415" y="390" font-size="11" font-weight="600">inquiry_id (PK)</text>
+            <text x="415" y="405" font-size="10">🔗 user_id → users</text>
+            <text x="415" y="420" font-size="10">🔗 car_id → cars</text>
+            <text x="415" y="435" font-size="10">message: TEXT</text>
+            <text x="415" y="450" font-size="10">status: NEW|IN_PROGRESS|CLOSED</text>
+            <text x="415" y="465" font-size="10">🔗 handled_by → users (NULL)</text>
+            <text x="415" y="480" font-size="10">created_at, handled_at</text>
+            
+            <!-- CHAT_CONVERSATIONS Tablosu (Sağ alt) -->
+            <rect x="720" y="340" width="240" height="150" fill="#F1F8E9" stroke="#689F38" stroke-width="2.5" rx="4"/>
+            <rect x="720" y="340" width="240" height="30" fill="#689F38" rx="4"/>
+            <text x="840" y="362" text-anchor="middle" fill="white" font-weight="bold" font-size="14">💬 chat_conversations</text>
+            <line x1="720" y1="370" x2="960" y2="370" stroke="#689F38" stroke-width="1.5"/>
+            
+            <text x="735" y="390" font-size="11" font-weight="600">conversation_id (PK)</text>
+            <text x="735" y="405" font-size="10">🔗 user_id → users</text>
+            <text x="735" y="420" font-size="10">🔗 car_id → cars</text>
+            <text x="735" y="435" font-size="10">status: OPEN | CLOSED</text>
+            <text x="735" y="450" font-size="10">UNIQUE(user_id, car_id)</text>
+            <text x="735" y="465" font-size="10">last_message_at, updated_at</text>
+            <text x="735" y="480" font-size="10">created_at</text>
+            
+            <!-- CHAT_MESSAGES Tablosu (En sağ) -->
+            <rect x="1030" y="340" width="240" height="170" fill="#E0F2F1" stroke="#009688" stroke-width="2.5" rx="4"/>
+            <rect x="1030" y="340" width="240" height="30" fill="#009688" rx="4"/>
+            <text x="1150" y="362" text-anchor="middle" fill="white" font-weight="bold" font-size="14">✉️ chat_messages</text>
+            <line x1="1030" y1="370" x2="1270" y2="370" stroke="#009688" stroke-width="1.5"/>
+            
+            <text x="1045" y="390" font-size="11" font-weight="600">message_id (PK)</text>
+            <text x="1045" y="405" font-size="10">🔗 conversation_id → chat_conver.</text>
+            <text x="1045" y="420" font-size="10">🔗 sender_id → users</text>
+            <text x="1045" y="435" font-size="10">sender_role: USER | ADMIN</text>
+            <text x="1045" y="450" font-size="10">message_text: TEXT</text>
+            <text x="1045" y="465" font-size="10">is_read: 0 | 1</text>
+            <text x="1045" y="480" font-size="10">created_at: TIMESTAMP</text>
+            
+            <!-- RELASYONLARİN ÇİZİMLERİ -->
+            <!-- users -> cars (created_by) -->
+            <line x1="650" y1="100" x2="800" y2="100" stroke="#FF6F00" stroke-width="3" marker-end="url(#arrowOrange)"/>
+            <text x="710" y="90" font-size="11" fill="#FF6F00" font-weight="bold">1:N</text>
+            <text x="710" y="110" font-size="9" fill="#FF6F00">created_by</text>
+            
+            <!-- users -> favorites (1:N) -->
+            <path d="M 480 200 Q 300 270 190 340" stroke="#4CAF50" stroke-width="3" fill="none" marker-end="url(#arrowGreen)"/>
+            <text x="320" y="260" font-size="10" fill="#4CAF50" font-weight="bold">1:N</text>
+            
+            <!-- cars -> favorites (1:N) -->
+            <path d="M 880 250 Q 550 290 300 380" stroke="#4CAF50" stroke-width="3" fill="none" marker-end="url(#arrowGreen)"/>
+            <text x="600" y="310" font-size="10" fill="#4CAF50" font-weight="bold">1:N</text>
+            
+            <!-- users -> inquiries (1:N) -->
+            <path d="M 520 200 Q 510 265 510 340" stroke="#E91E63" stroke-width="3" fill="none" marker-end="url(#arrowPink)"/>
+            <text x="520" y="270" font-size="10" fill="#E91E63" font-weight="bold">1:N</text>
+            
+            <!-- cars -> inquiries (1:N) -->
+            <path d="M 850 250 Q 700 290 620 340" stroke="#E91E63" stroke-width="3" fill="none" marker-end="url(#arrowPink)"/>
+            <text x="730" y="290" font-size="10" fill="#E91E63" font-weight="bold">1:N</text>
+            
+            <!-- users -> chat_conversations (1:N) -->
+            <path d="M 570 200 Q 700 270 800 340" stroke="#689F38" stroke-width="3" fill="none" marker-end="url(#arrowGreenDark)"/>
+            <text x="640" y="260" font-size="10" fill="#689F38" font-weight="bold">1:N</text>
+            
+            <!-- cars -> chat_conversations (1:N) -->
+            <path d="M 920 250 Q 880 290 880 340" stroke="#689F38" stroke-width="3" fill="none" marker-end="url(#arrowGreenDark)"/>
+            <text x="930" y="290" font-size="10" fill="#689F38" font-weight="bold">1:N</text>
+            
+            <!-- chat_conversations -> chat_messages (1:N) -->
+            <line x1="960" y1="415" x2="1030" y2="415" stroke="#009688" stroke-width="3" marker-end="url(#arrowCyan)"/>
+            <text x="985" y="405" font-size="10" fill="#009688" font-weight="bold">1:N</text>
+            
+            <!-- users -> chat_messages (sender_id) -->
+            <path d="M 630 150 Q 900 200 1050 350" stroke="#009688" stroke-width="2" stroke-dasharray="5,5" fill="none" marker-end="url(#arrowCyan)"/>
+            <text x="820" y="220" font-size="9" fill="#009688">sender_id</text>
+            
+            <!-- Arrow markers -->
+            <defs>
+                <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#FF6F00"/>
+                </marker>
+                <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#4CAF50"/>
+                </marker>
+                <marker id="arrowGreenDark" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#689F38"/>
+                </marker>
+                <marker id="arrowPink" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#E91E63"/>
+                </marker>
+                <marker id="arrowCyan" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#009688"/>
+                </marker>
+            </defs>
+        </svg>
+    </div>
+    
+    <div class="content-section" style="margin-top: 25px;">
+        <h3>📊 Entity Açıklamaları</h3>
+        <div class="db-feature" style="background: #FCE4EC; border-left-color: #E91E63;">
+            <strong>🔑 users (Merkez Entity)</strong><br>
+            Sistemin tüm kullanıcıları. Rol: USER (müşteri) veya ADMIN (satıcı)
+        </div>
+        <div class="db-feature" style="background: #E1F5FE; border-left-color: #2196F3;">
+            <strong>🚗 cars</strong><br>
+            Araç listeleri. images alanı JSON formatında resim bilgilerini içerir. created_by ile users'a bağlı.
+        </div>
+        <div class="db-feature" style="background: #E8F5E9; border-left-color: #4CAF50;">
+            <strong>❤️ favorites (Composite PK)</strong><br>
+            (user_id, car_id) bileşik anahtarı. Müşterilerin beğendikleri araçları tutar.
+        </div>
+        <div class="db-feature" style="background: #FCE4EC; border-left-color: #E91E63;">
+            <strong>❓ inquiries</strong><br>
+            Müşterilerin soruları. handled_by ile admin cevabı. Status: NEW → IN_PROGRESS → CLOSED
+        </div>
+        <div class="db-feature" style="background: #F1F8E9; border-left-color: #689F38;">
+            <strong>💬 chat_conversations</strong><br>
+            Araç başına konuşmalar. UNIQUE(user_id, car_id) - Her araç-kullanıcı çifti sadece 1 kez olabilir.
+        </div>
+        <div class="db-feature" style="background: #E0F2F1; border-left-color: #009688;">
+            <strong>✉️ chat_messages</strong><br>
+            Sohbet mesajları. sender_id ile users'a bağlı. sender_role: USER veya ADMIN
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 7</p>
+    </div>
+</div>
+
+<!-- SAYFA 8: API ENDPOINTS -->
+<div class="page">
+    <h2>🔌 API Endpoints</h2>
+    
+    <h3>👤 Kimlik Doğrulama</h3>
+    <div class="api-endpoint">
+        POST /api/auth/register - Kayıt ol<br>
+        POST /api/auth/login - Giriş yap<br>
+        POST /api/auth/logout - Çıkış yap
+    </div>
+    
+    <h3>🚗 Araç İşlemleri</h3>
+    <div class="api-endpoint">
+        GET /api/cars - Tüm araçları listele<br>
+        GET /api/cars/:id - Araç detayı<br>
+        POST /api/cars - Yeni araç ekle (Admin)<br>
+        PUT /api/cars/:id - Araç güncelle (Admin)<br>
+        DELETE /api/cars/:id - Araç sil (Admin)
+    </div>
+    
+    <h3>❤️ Favoriler</h3>
+    <div class="api-endpoint">
+        GET /api/favorites - Kullanıcının favorileri<br>
+        POST /api/favorites/:carId - Favoriye ekle<br>
+        DELETE /api/favorites/:carId - Favoriden sil
+    </div>
+    
+    <h3>❓ Sorular & Cevaplar</h3>
+    <div class="api-endpoint">
+        GET /api/inquiries - Soruları listele<br>
+        POST /api/inquiries - Soru ekle<br>
+        POST /api/inquiries/:id/answer - Cevap ver
+    </div>
+    
+    <h3>💬 Mesajlaşma</h3>
+    <div class="api-endpoint">
+        GET /api/chat/:carId - Sohbeti getir<br>
+        POST /api/chat/:carId - Mesaj gönder<br>
+        GET /api/chat - Tüm konuşmalar
+    </div>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 8</p>
+    </div>
+</div>
+
+<!-- SAYFA 9: SISTEM AKIŞI VE İŞ MANTAĞI -->
+<div class="page">
+    <h2>⚙️ Sistem Akışı & İş Mantığı</h2>
+    
+    <h3>1. Araç Listeleme Akışı</h3>
+    <div style="background: #F5F5F5; padding: 15px; border-radius: 4px; margin: 15px 0; font-size: 12px; line-height: 1.8;">
+        <strong>Müşteri Perspektifi:</strong><br>
+        1. Anasayfaya gir → 2. Mevcut araçları göster (AVAILABLE) →<br>
+        3. Filtreleme yap (marka, model, fiyat) →<br>
+        4. Araç detayını aç (resimler, açıklama) →<br>
+        5. Favoriye ekle veya satıcıyla iletişim kur
+    </div>
+    
+    <div style="background: #E3F2FD; padding: 15px; border-radius: 4px; margin: 15px 0; font-size: 12px; line-height: 1.8;">
+        <strong>Satıcı Perspektifi:</strong><br>
+        1. Admin paneline giriş yap → 2. Araç ekle (marka, model, fiyat vs.) →<br>
+        3. Araç resimleri yükle → 4. Araç durumunu ayarla (AVAILABLE) →<br>
+        5. Müşteri sorularını cevapla → 6. Satış sonrası durumu güncelle (SOLD)
+    </div>
+    
+    <h3>2. Mesajlaşma Mantığı</h3>
+    <div style="background: #F3E5F5; padding: 15px; border-radius: 4px; margin: 15px 0; font-size: 12px;">
+        <strong>Chat Flow:</strong>
+        <ul style="margin: 10px 0; margin-left: 20px;">
+            <li>Müşteri bir araçla ilgili sorular sorar</li>
+            <li>Sistem <strong>chat_conversations</strong> kaydı oluşturur</li>
+            <li>Her mesaj <strong>chat_messages</strong>'te saklanır</li>
+            <li>Mesaj okunmayan olarak işaretlenir (is_read)</li>
+            <li>Admin cevap verir, kullanıcı bildirimi alır</li>
+            <li>Konuşma tamamlanırsa status CLOSED'a çevrilir</li>
+        </ul>
+    </div>
+    
+    <h3>3. Favoriler Sistemi</h3>
+    <div style="background: #E8F5E9; padding: 15px; border-radius: 4px; margin: 15px 0; font-size: 12px;">
+        <strong>Akış:</strong>
+        <ul style="margin: 10px 0; margin-left: 20px;">
+            <li>Müşteri araçı görüp ❤️ ikonuna tıklar</li>
+            <li><strong>favorites</strong> tablosuna (user_id, car_id) eklenir</li>
+            <li>Favoriler sayfasında tüm beğenilen araçlar listelenir</li>
+            <li>Favori tekrar tıklanırsa silinir (soft delete)</li>
+            <li>Araç silinirse (is_deleted=1) ilişkili favoriler cascade delete</li>
+        </ul>
+    </div>
+    
+    <h3>4. Sorular & Cevaplar</h3>
+    <div style="background: #FCE4EC; padding: 15px; border-radius: 4px; margin: 15px 0; font-size: 12px;">
+        <strong>İşlem:</strong>
+        <ul style="margin: 10px 0; margin-left: 20px;">
+            <li>Müşteri araç detayında soru sorar</li>
+            <li>Soru <strong>inquiries</strong> tablosuna kaydedilir (status=NEW)</li>
+            <li>Admin panelde yeni soruları görüp cevaplar</li>
+            <li>Cevap kaydedilir, status IN_PROGRESS → CLOSED olur</li>
+            <li>handled_by ve handled_at alanları doldurulur</li>
+        </ul>
+    </div>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 9</p>
+    </div>
+</div>
+
+<!-- SAYFA 10: KULLANICI AKIŞLARI -->
+<div class="page">
+    <h2>🔄 Kullanıcı Akışları</h2>
+    
+    <h3>Alıcı Akışı</h3>
+    <ol>
+        <li>Uygulamaya erişir ve araçları görüntüler</li>
+        <li>Arama ve filtreleme yaparak araçları bulur</li>
+        <li>İlgi çeken araçları favorilere ekler</li>
+        <li>Araç detayını inceleyip satıcıyla iletişim kurar</li>
+        <li>Sorular sorabilir ve cevap bekler</li>
+        <li>Satıcıyla mesajlaşarak işemi tamamlar</li>
+    </ol>
+    
+    <h3>Satıcı Akışı</h3>
+    <ol>
+        <li>Admin paneline giriş yapar</li>
+        <li>Araç bilgilerini ve resimlerini yükler</li>
+        <li>Araç durumunu (Satılı/Uygun) yönetir</li>
+        <li>Müşteri sorularına yanıt verir</li>
+        <li>Mesajlaşma aracılığıyla potansiyel alıcılarla iletişim kurar</li>
+        <li>Satışı kaydeder ve araç durumunu günceller</li>
+    </ol>
+    
+    <h3>Yönetici Özellikleri</h3>
+    <ul>
+        <li>Tüm araçları yönet (Oluştur, Düzenle, Sil)</li>
+        <li>Kullanıcı rollerini yönet</li>
+        <li>Sistem ayarlarını kontrol et</li>
+        <li>Raporları gözden geçir</li>
+    </ul>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 10</p>
+    </div>
+</div>
+
+<!-- SAYFA 11: KATMANLI MİMARİ VE VERİ AKIŞI -->
+<div class="page">
+    <h2>📊 Katmanlı Mimari & Veri Akışı</h2>
+    
+    <div style="margin: 20px 0;">
+        <h3 style="color: #2196F3; margin-bottom: 15px;">MVC Mimarisi - Veri Akışı</h3>
+        
+        <svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; border: 1px solid #eee;">
+            <!-- CLIENT -->
+            <rect x="50" y="20" width="150" height="60" fill="#FFE082" stroke="#FBC02D" stroke-width="2"/>
+            <text x="125" y="55" text-anchor="middle" font-weight="bold">Client/Browser</text>
+            
+            <!-- REQUEST ARROW -->
+            <line x1="200" y1="50" x2="280" y2="50" stroke="#2196F3" stroke-width="3" marker-end="url(#arrowBlue)"/>
+            <text x="230" y="35" font-size="12" fill="#2196F3">HTTP Request</text>
+            
+            <!-- CONTROLLER -->
+            <rect x="280" y="20" width="140" height="60" fill="#64B5F6" stroke="#2196F3" stroke-width="2"/>
+            <text x="350" y="45" text-anchor="middle" font-weight="bold" fill="white">Controller</text>
+            <text x="350" y="60" text-anchor="middle" font-size="11" fill="white">(AuthController)</text>
+            
+            <!-- DOWN TO SERVICE -->
+            <line x1="350" y1="80" x2="350" y2="130" stroke="#FF7043" stroke-width="2" marker-end="url(#arrowOrange)"/>
+            <text x="360" y="110" font-size="11" fill="#FF7043">Process</text>
+            
+            <!-- SERVICE -->
+            <rect x="280" y="130" width="140" height="60" fill="#FF7043" stroke="#FF5722" stroke-width="2"/>
+            <text x="350" y="155" text-anchor="middle" font-weight="bold" fill="white">Service Layer</text>
+            <text x="350" y="170" text-anchor="middle" font-size="11" fill="white">(AuthService)</text>
+            
+            <!-- DOWN TO REPOSITORY -->
+            <line x1="350" y1="190" x2="350" y2="240" stroke="#66BB6A" stroke-width="2" marker-end="url(#arrowGreen)"/>
+            <text x="360" y="220" font-size="11" fill="#66BB6A">Query</text>
+            
+            <!-- REPOSITORY -->
+            <rect x="280" y="240" width="140" height="60" fill="#66BB6A" stroke="#43A047" stroke-width="2"/>
+            <text x="350" y="265" text-anchor="middle" font-weight="bold" fill="white">Repository</text>
+            <text x="350" y="280" text-anchor="middle" font-size="11" fill="white">(UserRepository)</text>
+            
+            <!-- DOWN TO DATABASE -->
+            <line x1="350" y1="300" x2="350" y2="330" stroke="#AB47BC" stroke-width="2" marker-end="url(#arrowPurple)"/>
+            <text x="360" y="320" font-size="11" fill="#AB47BC">SQL</text>
+            
+            <!-- DATABASE -->
+            <rect x="280" y="330" width="140" height="50" fill="#AB47BC" stroke="#8E24AA" stroke-width="2"/>
+            <text x="350" y="360" text-anchor="middle" font-weight="bold" fill="white">PostgreSQL DB</text>
+            
+            <!-- RESPONSE PATH (RIGHT SIDE) -->
+            
+            <!-- RIGHT SIDE ARROWS - RESPONSE -->
+            <line x1="420" y1="360" x2="550" y2="360" stroke="#AB47BC" stroke-width="2" marker-end="url(#arrowPurple)"/>
+            <text x="480" y="350" font-size="11" fill="#AB47BC">Result</text>
+            
+            <line x1="550" y1="360" x2="550" y2="300" stroke="#66BB6A" stroke-width="2" marker-end="url(#arrowGreen)"/>
+            <text x="560" y="330" font-size="11" fill="#66BB6A">Data</text>
+            
+            <line x1="550" y1="240" x2="550" y2="190" stroke="#FF7043" stroke-width="2" marker-end="url(#arrowOrange)"/>
+            <text x="560" y="220" font-size="11" fill="#FF7043">Process</text>
+            
+            <line x1="550" y1="130" x2="550" y2="80" stroke="#64B5F6" stroke-width="2" marker-end="url(#arrowBlue)"/>
+            <text x="560" y="110" font-size="11" fill="#2196F3">Format</text>
+            
+            <!-- RESPONSE ARROW TO CLIENT -->
+            <line x1="550" y1="50" x2="680" y2="50" stroke="#2196F3" stroke-width="3" marker-end="url(#arrowBlue)"/>
+            <text x="600" y="35" font-size="12" fill="#2196F3">HTTP Response</text>
+            
+            <!-- RESPONSE CLIENT -->
+            <rect x="680" y="20" width="150" height="60" fill="#A5D6A7" stroke="#4CAF50" stroke-width="2"/>
+            <text x="755" y="50" text-anchor="middle" font-weight="bold">Response JSON</text>
+            <text x="755" y="65" text-anchor="middle" font-size="11">(View)</text>
+            
+            <!-- LEGEND -->
+            <g transform="translate(50, 220)">
+                <text x="0" y="0" font-weight="bold" font-size="13">İstek Akışı:</text>
+                <text x="0" y="25" font-size="11">1️⃣ Client tarayıcıdan istek gönderir</text>
+                <text x="0" y="45" font-size="11">2️⃣ Controller istek işler ve Service'i çağırır</text>
+                <text x="0" y="65" font-size="11">3️⃣ Service iş mantığını çalıştırır, Repository çağırır</text>
+                <text x="0" y="85" font-size="11">4️⃣ Repository veritabanına SQL sorgusu gönderir</text>
+                <text x="0" y="105" font-size="11">5️⃣ Veritabanı sonuç döndürür → Response geri gönderilir</text>
+            </g>
+            
+            <defs>
+                <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#2196F3" />
+                </marker>
+                <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#FF7043" />
+                </marker>
+                <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#66BB6A" />
+                </marker>
+                <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#AB47BC" />
+                </marker>
+            </defs>
+        </svg>
+    </div>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 11</p>
+    </div>
+</div>
+
+<!-- SAYFA 12: GÜVENLİK VE PERFORMANS -->
+<div class="page">
+    <h2>🔐 Güvenlik & Performans</h2>
+    
+    <h3>Güvenlik Özellikleri</h3>
+    <div class="feature-box">
+        <strong>Otentikasyon:</strong> Şifreli oturum yönetimi (SESSION)<br>
+        <strong>Yetkilendirme:</strong> Rol tabanlı erişim kontrolü (RBAC)<br>
+        <strong>Şifre:</strong> Güvenli hash algoritmaları<br>
+        <strong>SQL Injection Koruması:</strong> Hazırlanmış sorgulamalar<br>
+        <strong>CSRF Koruması:</strong> Token tabanlı koruma<br>
+        <strong>Veri Doğrulama:</strong> Giriş ve çıkış doğrulaması
+    </div>
+    
+    <h3>Performans Optimizasyonları</h3>
+    <div class="feature-box">
+        <strong>Veritabanı:</strong> Dizinleme ve sorgu optimizasyonu<br>
+        <strong>Caching:</strong> Session caching<br>
+        <strong>Middleware:</strong> İstek işleme optimizasyonu<br>
+        <strong>Lazy Loading:</strong> Gerektiğinde veri yükleme<br>
+        <strong>Pagination:</strong> Büyük veri setlerinin sayfalanması
+    </div>
+    
+    <h3>Bakım & İzleme</h3>
+    <ul>
+        <li>Hata günlükleri (<code>logs/</code> klasörü)</li>
+        <li>Veritabanı migrasyonları</li>
+        <li>Veri tutarlılığı kontrolleri</li>
+        <li>Düzenli yedekleme önerilir</li>
+    </ul>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 12</p>
+    </div>
+</div>
+
+<!-- SAYFA 13: KURULUM & DAĞITIM -->
+<div class="page">
+    <h2>🚀 Kurulum & Dağıtım</h2>
+    
+    <h3>Sistem Gereksinimleri</h3>
+    <ul>
+        <li>PHP 8.0 veya daha yeni</li>
+        <li>PostgreSQL 12 veya daha yeni</li>
+        <li>Apache Web Sunucusu</li>
+        <li>Tarayıcı: Modern HTML5 desteği</li>
+    </ul>
+    
+    <h3>Kurulum Adımları</h3>
+    <ol>
+        <li>XAMPP kurulumu ve başlatması</li>
+        <li>Projeyi <code>htdocs</code> klasörüne kopyala</li>
+        <li>PostgreSQL'de veritabanı oluştur</li>
+        <li><code>database/postgresql/migrations/</code> dosyalarını çalıştır</li>
+        <li><code>app/config/database.php</code> ayarlarını konfigüre et</li>
+        <li><code>http://localhost/gallery</code> adresine erişim sağla</li>
+    </ol>
+    
+    <h3>Dağıtım Önerileri</h3>
+    <div class="feature-box">
+        <strong>Geliştirme:</strong> XAMPP + PostgreSQL lokal<br>
+        <strong>Prodüksiyon:</strong> Linux sunucu + Nginx/Apache<br>
+        <strong>SSL:</strong> HTTPS sertifikası (Let's Encrypt)<br>
+        <strong>Database:</strong> Managed PostgreSQL servisi<br>
+        <strong>CDN:</strong> Statik dosyaları CDN'de barındır
+    </div>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 13</p>
+    </div>
+</div>
+
+<!-- SAYFA 14: KULLANICI AKTİVİTESİ KAYITLAMA SİSTEMİ -->
+<div class="page">
+    <h2>📝 Kullanıcı Aktivitesi Kayıt Sistemi</h2>
+    
+    <h3>Amaç & Faydaları</h3>
+    <div class="feature-box">
+        <strong>Güvenlik Denetimi (Audit Trail):</strong> Tüm kullanıcı işlemlerinin kaydını tut<br>
+        <strong>Oturum Yönetimi:</strong> Giriş/çıkış zamanlarını ve IP adreslerini takip et<br>
+        <strong>Şüpheli Aktiviteler:</strong> Başarısız giriş denemelerini değerlendir<br>
+        <strong>Uyumluluk:</strong> GDPR ve diğer veri koruma yönetmeliklerine uyum<br>
+        <strong>Analitik:</strong> Kullanıcı davranış analizi ve kullanım istatistikleri
+    </div>
+    
+    <h3>📊 user_activity_logs Tablosu Yapısı</h3>
+    <div style="background: #F3E5F5; border-left: 4px solid #9C27B0; padding: 15px; margin: 15px 0; border-radius: 4px;">
+        <strong>Alan Tanımları:</strong><br>
+        <code>log_id</code> (PK, BIGSERIAL) - Benzersiz log kaydı<br>
+        <code>user_id</code> (FK users, NULL) - Giriş yapan kullanıcı (NULL = başarısız giriş)<br>
+        <code>action</code> (VARCHAR 30) - LOGIN | LOGOUT | FAILED_LOGIN | ACTION<br>
+        <code>ip_address</code> (VARCHAR 45) - İstemci IP adresi (IPv4/IPv6 destekleme)<br>
+        <code>user_agent</code> (VARCHAR 500) - Tarayıcı bilgileri<br>
+        <code>details</code> (JSON) - Ek bilgiler (email, başarısızlık nedeni, vb.)<br>
+        <code>created_at</code> (TIMESTAMP) - Kaydın zamanı (DEFAULT CURRENT_TIMESTAMP)
+    </div>
+    
+    <h3>🔄 İmplementasyon Detayları</h3>
+    <div class="db-feature">
+        <strong>AuthController Entegrasyonu:</strong><br>
+        • Login başarılı → <code>logActivity($userId, 'LOGIN')</code><br>
+        • Login başarısız → <code>logActivity(null, 'FAILED_LOGIN')</code><br>
+        • Logout → <code>logActivity($userId, 'LOGOUT')</code>
+    </div>
+    
+    <div class="db-feature">
+        <strong>LogRepository Metodları:</strong><br>
+        • <code>logActivity()</code> - Yeni log kaydı oluştur<br>
+        • <code>getUserLogs($userId)</code> - Belirli kullanıcının logları<br>
+        • <code>getLoginAttempts()</code> - Tüm giriş denemelerini listele<br>
+        • <code>getFailedLoginsByIp()</code> - IP'ye göre başarısız giriş bulma (brute-force tespit)<br>
+        • <code>deleteOldLogs($days)</code> - Eski logları temizle (GDPR uyumluluk)<br>
+        • <code>getActivityStats()</code> - İstatistik ve özet bilgiler
+    </div>
+    
+    <h3>💡 Kullanım Örnekleri</h3>
+    <div class="api-endpoint">
+// Başarılı giriş<br>
+$logRepository->logActivity(1, 'LOGIN', '192.168.1.100', 'Mozilla/5.0...', ['email' => 'user@example.com']);<br>
+<br>
+// Başarısız giriş<br>
+$logRepository->logActivity(null, 'FAILED_LOGIN', '192.168.1.50', 'Mozilla/5.0...', ['email' => 'attacker@mail.com', 'reason' => 'Invalid password']);<br>
+<br>
+// Belirli kullanıcının logs (son 50)<br>
+$userLogs = $logRepository->getUserLogs(1, 50);<br>
+<br>
+// Brute-force tespiti (30 dakikadaki başarısız giriş)<br>
+$failedAttempts = $logRepository->getFailedLoginsByIp('192.168.1.50', 30);<br>
+if (count($failedAttempts) > 5) { /* Block IP */ }
+    </div>
+    
+    <h3>📈 İndeksleme Stratejisi</h3>
+    <ul style="font-size: 13px;">
+        <li><strong>idx_logs_user_id:</strong> Belirli kullanıcı loglarını hızlı sorgulamak</li>
+        <li><strong>idx_logs_created_at DESC:</strong> Son aktiviteleri hızlı alma</li>
+        <li><strong>idx_logs_action:</strong> Action türüne göre filtreleme (LOGIN/LOGOUT/FAILED_LOGIN)</li>
+        <li><strong>idx_logs_user_action_date:</strong> Composite index - Kullanıcı+action+tarih sorgularını optimize etme</li>
+    </ul>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 14</p>
+    </div>
+</div>
+
+<!-- SAYFA 15: GELECEK GELİŞTİRMELER -->
+<div class="page">
+    <h2>🔮 Gelecek Geliştirmeler</h2>
+    
+    <h3>Kısa Vadeli (1-2 Ay)</h3>
+    <ul>
+        <li>Mobile responsive tasarım iyileştirmesi</li>
+        <li>İleri arama filtreleri (km aralığı, donanım vb.)</li>
+        <li>Email bildirim sistemi</li>
+        <li>Araç karşılaştırma özelliği</li>
+        <li>Yorum ve puanlama sistemi</li>
+    </ul>
+    
+    <h3>Orta Vadeli (3-6 Ay)</h3>
+    <ul>
+        <li>İlan ön değeri hesaplayıcısı</li>
+        <li>Finansman seçenekleri entegrasyonu</li>
+        <li>Sigorta danışmanı hizmetleri</li>
+        <li>Araç belgesi doğrulama sistemi</li>
+        <li>İthalat/gümrük durumu kontrolü</li>
+    </ul>
+    
+    <h3>Uzun Vadeli (6-12 Ay)</h3>
+    <ul>
+        <li>Mobil uygulama (iOS/Android)</li>
+        <li>Yapay zeka tabanlı fiyat tahmini</li>
+        <li>Video tour entegrasyonu</li>
+        <li>Virtual showroom (VR)</li>
+        <li>Kredi onay sistemi</li>
+    </ul>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 15</p>
+    </div>
+</div>
+
+<!-- SAYFA 16: SONUÇ -->
+<div class="page cover-page">
+    <h1>Teşekkürler!</h1>
+    <div class="subtitle">Gallery Araç Galerisi Yönetim Sistemi</div>
+    
+    <div style="margin-top: 60px; text-align: left; max-width: 400px;">
+        <h3>İletişim Bilgileri</h3>
+        <p>📧 Email: info@gallery.local</p>
+        <p>🌐 Web: http://localhost/gallery</p>
+        <p>📱 Telefon: +90 (XXX) XXX-XXXX</p>
+    </div>
+    
+    <div style="margin-top: 80px; color: #999; font-size: 12px;">
+        <p>Bu proje, modern web teknolojileri kullanarak profesyonel bir araç galerisi</p>
+        <p>yönetim sistemi sağlamaktadır.</p>
+        <p style="margin-top: 20px;">© 2026 Gallery - Tüm Hakları Saklıdır</p>
+    </div>
+</div>
+
+</body>
+</html>

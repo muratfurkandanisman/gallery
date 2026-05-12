@@ -39,7 +39,10 @@ class Auth
     {
         $dto = UserDto::fromDbRow($user);
 
-        session_regenerate_id(true);
+        // Avoid regenerating session id in CLI or after headers sent (prevents warnings during tests)
+        if (php_sapi_name() !== 'cli' && !headers_sent()) {
+            session_regenerate_id(true);
+        }
         $_SESSION['user_id'] = (int) $dto['user_id'];
         $_SESSION['full_name'] = $dto['full_name'];
         $_SESSION['email'] = $dto['email'];

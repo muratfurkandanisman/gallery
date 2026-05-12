@@ -23,12 +23,13 @@ class UserDto
 
     public static function fromDbRow(array $row): array
     {
-        $role = self::normalizeRole($row['ROLE'] ?? null);
+        // Accept both uppercase (DB) and lowercase (normalized) keys
+        $role = self::normalizeRole($row['ROLE'] ?? $row['role'] ?? null);
 
         return [
-            'user_id' => (int) ($row['USER_ID'] ?? 0),
-            'full_name' => $row['FULL_NAME'] ?? null,
-            'email' => $row['EMAIL'] ?? null,
+            'user_id' => (int) ($row['USER_ID'] ?? $row['user_id'] ?? 0),
+            'full_name' => $row['FULL_NAME'] ?? $row['full_name'] ?? null,
+            'email' => $row['EMAIL'] ?? $row['email'] ?? null,
             'role' => $role,
             'permissions' => self::permissions($role),
         ];
