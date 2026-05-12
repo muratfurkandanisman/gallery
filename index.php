@@ -18,7 +18,7 @@ function isApiPath(string $path): bool
 		return str_starts_with($path, '/api/');
 }
 
-function ensureDbOrFail($db): void
+function ensureDbOrFail(?Database $db): void
 {
 		if ($db === null) {
 				Response::error('Veritabani baglantisi kurulamadigi icin API su an kullanilamiyor.', 500);
@@ -113,6 +113,22 @@ if (isApiPath($path)) {
 		if ($path === '/api/admin/inquiries' && $method === 'GET') {
 				$inquiryController->adminList();
 		}
+		if ($path === '/api/admin/logs' && $method === 'GET') {
+			if (!Auth::check()) {
+				Response::error('Unauthenticated', 401);
+			}
+			if (!Auth::isAdmin()) {
+				Response::error('Erisim reddedildi', 403);
+			}
+
+			$input = Request::input();
+			$page = isset($input['page']) ? max(1, (int)$input['page']) : 1;
+			$limit = 10;
+			$offset = ($page - 1) * $limit;
+
+			$logs = $logRepo->getAllLogs($limit, $offset);
+			Response::json(['data' => $logs, 'page' => $page]);
+		}
 		if (preg_match('#^/api/admin/inquiries/(\d+)$#', $path, $m) && $method === 'PUT') {
 				$inquiryController->adminUpdateStatus((int) $m[1]);
 		}
@@ -165,6 +181,36 @@ if ($path === '/admin') {
 		}
 
 		require __DIR__ . '/app/views/admin.php';
+		exit;
+}
+
+if ($path === '/admin/logs') {
+		if (!Auth::check()) {
+			header('Location: ' . $baseUrl . '/access');
+			exit;
+		}
+
+		if (!Auth::isAdmin()) {
+			http_response_code(403);
+			echo 'Bu sayfaya erisim yetkiniz yok.';
+			exit;
+		}
+
+		if ($db === null) {
+			http_response_code(500);
+			echo 'Veritabani baglantisi yok.';
+			exit;
+		}
+
+		$logRepo = new LogRepository($db);
+		$user = Auth::user();
+		$logRepo->logActivity(Auth::id(), 'VIEW_LOGS', [
+			'email' => $user['email'] ?? null,
+			'full_name' => $user['full_name'] ?? null,
+			'role' => $user['role'] ?? null,
+		]);
+
+		require __DIR__ . '/app/views/logs.php';
 		exit;
 }
 

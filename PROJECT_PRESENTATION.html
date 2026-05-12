@@ -494,9 +494,9 @@
     </div>
 
     <div class="db-feature" style="background: #F3E5F5; border-left-color: #9C27B0;">
-        <strong>📝 user_activity_logs (6 Alan) - YENİ!</strong><br>
+        <strong>📝 user_activity_logs (5 Alan) - YENİ!</strong><br>
         <code>log_id</code> (PK) | <code>user_id</code> (FK users, NULL - başarısız girişler) | <code>action</code> (LOGIN/LOGOUT/FAILED_LOGIN/ACTION) |<br>
-        <code>ip_address</code> (VARCHAR 45) | <code>user_agent</code> (VARCHAR 500) | <code>details</code> (JSON) | <code>created_at</code> (TIMESTAMP)<br>
+        <code>details</code> (JSON) | <code>created_at</code> (TIMESTAMP)<br>
         <strong>Amaç:</strong> Kullanıcı giriş/çıkış aktivitelerini ve güvenlik olaylarını takip etmek
     </div>
     
@@ -1042,9 +1042,7 @@
         <code>log_id</code> (PK, BIGSERIAL) - Benzersiz log kaydı<br>
         <code>user_id</code> (FK users, NULL) - Giriş yapan kullanıcı (NULL = başarısız giriş)<br>
         <code>action</code> (VARCHAR 30) - LOGIN | LOGOUT | FAILED_LOGIN | ACTION<br>
-        <code>ip_address</code> (VARCHAR 45) - İstemci IP adresi (IPv4/IPv6 destekleme)<br>
-        <code>user_agent</code> (VARCHAR 500) - Tarayıcı bilgileri<br>
-        <code>details</code> (JSON) - Ek bilgiler (email, başarısızlık nedeni, vb.)<br>
+        <code>details</code> (JSON) - Ek bilgiler (email, full_name, role, başarısızlık nedeni vb.)<br>
         <code>created_at</code> (TIMESTAMP) - Kaydın zamanı (DEFAULT CURRENT_TIMESTAMP)
     </div>
     
@@ -1069,17 +1067,20 @@
     <h3>💡 Kullanım Örnekleri</h3>
     <div class="api-endpoint">
 // Başarılı giriş<br>
-$logRepository->logActivity(1, 'LOGIN', '192.168.1.100', 'Mozilla/5.0...', ['email' => 'user@example.com']);<br>
+$logRepository->logActivity(1, 'LOGIN', ['email' => 'user@example.com', 'full_name' => 'John Doe', 'role' => 'USER']);<br>
 <br>
 // Başarısız giriş<br>
-$logRepository->logActivity(null, 'FAILED_LOGIN', '192.168.1.50', 'Mozilla/5.0...', ['email' => 'attacker@mail.com', 'reason' => 'Invalid password']);<br>
+$logRepository->logActivity(null, 'FAILED_LOGIN', ['email' => 'attacker@mail.com', 'reason' => 'Invalid password']);<br>
+<br>
+// Logout<br>
+$logRepository->logActivity(1, 'LOGOUT', ['email' => 'user@example.com', 'full_name' => 'John Doe']);<br>
 <br>
 // Belirli kullanıcının logs (son 50)<br>
 $userLogs = $logRepository->getUserLogs(1, 50);<br>
 <br>
-// Brute-force tespiti (30 dakikadaki başarısız giriş)<br>
-$failedAttempts = $logRepository->getFailedLoginsByIp('192.168.1.50', 30);<br>
-if (count($failedAttempts) > 5) { /* Block IP */ }
+// Başarısız giriş denemelerini listele<br>
+$failedAttempts = $logRepository->getFailedLoginAttempts(50);<br>
+if (count($failedAttempts) > 5) { /* Suspicious activity */ }
     </div>
     
     <h3>📈 İndeksleme Stratejisi</h3>

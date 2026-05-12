@@ -15,6 +15,12 @@ class LogRepository {
         string $action,
         ?array $details = null
     ): int {
+        // Ensure action conforms to DB check constraint
+        $allowed = ['LOGIN', 'LOGOUT', 'FAILED_LOGIN', 'ACTION'];
+        $action = strtoupper(trim($action));
+        if (!in_array($action, $allowed, true)) {
+            $action = 'ACTION';
+        }
         $sql = "INSERT INTO user_activity_logs 
                 (user_id, action, details) 
                 VALUES (?, ?, ?)";

@@ -154,6 +154,12 @@ function attachHeaderActions() {
     navAdminLink.classList.toggle('hidden', !(state.user && state.user.permissions?.can_view_admin_panel));
   }
 
+  const navLogsLink = $('#navLogsLink');
+  if (navLogsLink) {
+    const canViewLogs = !!(state.user && (state.user.permissions?.can_view_admin_panel || state.user.role === 'ADMIN'));
+    navLogsLink.classList.toggle('hidden', !canViewLogs);
+  }
+
   const navMessagesLink = $('#navMessagesLink');
   if (navMessagesLink) {
     navMessagesLink.classList.toggle('hidden', !state.user);
@@ -354,6 +360,7 @@ async function initAccess() {
 }
 
 async function initDetail() {
+
   attachHeaderActions();
   await loadFavorites();
 
@@ -639,6 +646,57 @@ async function loadAdminInquiries() {
       </td>
     </tr>
   `).join('');
+}
+
+async function initLogs() {
+  attachHeaderActions();
+  // Allow admin role OR permissions flag
+  if (!state.user || !(state.user.permissions?.can_view_admin_panel || state.user.role === 'ADMIN')) {
+    location.href = appUrl('/access');
+    return;
+  }
+
+  let page = 1;
+
+  async function loadPage(p) {
+    try {
+      const data = await api(`/api/admin/logs?page=${p}`);
+      const logs = data.data || [];
+      page = data.page || p;
+      $('#logsPage').textContent = `Sayfa ${page}`;
+
+      $('#logsTableBody').innerHTML = logs.map((l) => {
+        let details = '';
+        if (l.details && typeof l.details === 'object') {
+          details = Object.entries(l.details).map(([k,v]) => `${k}: ${esc(v)}`).join('<br>');
+        } else if (l.details) {
+          details = esc(JSON.stringify(l.details));
+        }
+        return `
+          <tr>
+            <td>${esc(l.log_id)}</td>
+            <td>${esc(l.user_id)}</td>
+            <td>${esc(l.action)}</td>
+            <td>${details}</td>
+            <td>${esc(l.created_at)}</td>
+          </tr>
+        `;
+      }).join('');
+    } catch (err) {
+      toast(err.message);
+    }
+  }
+
+  $('#logsPrev')?.addEventListener('click', async () => {
+    if (page <= 1) return;
+    await loadPage(page - 1);
+  });
+
+  $('#logsNext')?.addEventListener('click', async () => {
+    await loadPage(page + 1);
+  });
+
+  await loadPage(1);
 }
 
 async function initAdmin() {
@@ -942,6 +1000,7 @@ async function boot() {
   if (page === 'admin') return initAdmin();
   if (page === 'admin-edit') return initAdminEdit();
   if (page === 'messages') return initMessages();
+  if (page === 'logs') return initLogs();
 }
 
 window.addEventListener('DOMContentLoaded', () => {
