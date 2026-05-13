@@ -31,17 +31,33 @@ class CarRepository
             $params['max_price'] = (float) $filters['max_price'];
         }
 
-        $sql = "SELECT c.car_id, c.brand, c.model, c.year, c.price, c.mileage, c.fuel_type, c.gear_type, c.color,
-                       c.description, c.status, c.created_at, c.images
-                FROM cars c
-                WHERE " . implode(' AND ', $where) . "
-                ORDER BY c.created_at DESC";
+                if ($this->db->isPgsql()) {
+                        $sql = "SELECT c.car_id, c.brand, c.model, c.year, c.price, c.mileage, c.fuel_type, c.gear_type, c.color,
+                                             c.description, c.status, c.created_at,
+                                             COALESCE(
+                                                 (SELECT json_agg(ci.image_path ORDER BY ci.sort_order)
+                                                    FROM car_images ci
+                                                    WHERE ci.car_id = c.car_id),
+                                                 c.images::json,
+                                                 '[]'::json
+                                             ) AS images
+                                        FROM cars c
+                                        WHERE " . implode(' AND ', $where) . "
+                                        ORDER BY c.created_at DESC";
+                } else {
+                        $sql = "SELECT c.car_id, c.brand, c.model, c.year, c.price, c.mileage, c.fuel_type, c.gear_type, c.color,
+                                             c.description, c.status, c.created_at, c.images
+                                        FROM cars c
+                                        WHERE " . implode(' AND ', $where) . "
+                                        ORDER BY c.created_at DESC";
+                }
 
         $cars = $this->db->fetchAll($sql, $params);
 
         foreach ($cars as &$car) {
             $images = $this->parseImages($car['IMAGES'] ?? null);
             $car['IMAGE_PATH'] = $images[0]['IMAGE_PATH'] ?? null;
+            $car['IMAGES'] = $images;
         }
         unset($car);
 
@@ -68,11 +84,26 @@ class CarRepository
 
     public function findById(int $carId): ?array
     {
-        $sql = "SELECT c.car_id, c.brand, c.model, c.year, c.price, c.mileage, c.fuel_type, c.gear_type, c.color,
-                   c.description, c.status, c.created_at, c.sold_at, c.images
-                FROM cars c
-                WHERE c.car_id = :car_id AND c.is_deleted = 0
-                FETCH FIRST 1 ROWS ONLY";
+                if ($this->db->isPgsql()) {
+                        $sql = "SELECT c.car_id, c.brand, c.model, c.year, c.price, c.mileage, c.fuel_type, c.gear_type, c.color,
+                                             c.description, c.status, c.created_at, c.sold_at,
+                                             COALESCE(
+                                                 (SELECT json_agg(ci.image_path ORDER BY ci.sort_order)
+                                                    FROM car_images ci
+                                                    WHERE ci.car_id = c.car_id),
+                                                 c.images::json,
+                                                 '[]'::json
+                                             ) AS images
+                                        FROM cars c
+                                        WHERE c.car_id = :car_id AND c.is_deleted = 0
+                                        FETCH FIRST 1 ROWS ONLY";
+                } else {
+                        $sql = "SELECT c.car_id, c.brand, c.model, c.year, c.price, c.mileage, c.fuel_type, c.gear_type, c.color,
+                                             c.description, c.status, c.created_at, c.sold_at, c.images
+                                        FROM cars c
+                                        WHERE c.car_id = :car_id AND c.is_deleted = 0
+                                        FETCH FIRST 1 ROWS ONLY";
+                }
 
         $car = $this->db->fetchOne($sql, ['car_id' => $carId]);
         if (!$car) {
@@ -80,6 +111,18 @@ class CarRepository
         }
 
         $car['IMAGES'] = $this->parseImages($car['IMAGES'] ?? null);
+
+        if ($this->db->isPgsql()) {
+            $car['DAMAGE_RECORDS'] = $this->db->fetchAll(
+                "SELECT damage_id, car_id, damage_area, damage_type, damage_level, estimated_cost, description, recorded_at
+                 FROM damage_records
+                 WHERE car_id = :car_id
+                 ORDER BY recorded_at DESC, damage_id DESC",
+                ['car_id' => $carId]
+            );
+        } else {
+            $car['DAMAGE_RECORDS'] = [];
+        }
 
         return $car;
     }

@@ -58,6 +58,16 @@
       </div>
     </section>
 
+    <section class="ve-spec-table">
+      <div class="ve-left-copy">
+        <h2>HASAR<br>KAYITLARI</h2>
+      </div>
+      <div class="ve-right-copy">
+        <p class="ve-panel-kicker">Damage Records</p>
+        <div class="ve-lines" id="dDamageRecords"></div>
+      </div>
+    </section>
+
     <section class="ve-actions">
       <div class="ve-actions-right">
         <textarea id="inqMessage" rows="3" placeholder="Saticiya mesajiniz..."></textarea>

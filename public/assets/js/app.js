@@ -323,7 +323,7 @@ function validateAccessForm(mode) {
   if (!email || !email.includes('@')) {
     return 'Gecerli bir e-posta giriniz.';
   }
-  if (password.length < 6) {
+  if (mode === 'register' && password.length < 6) {
     return 'Sifre en az 6 karakter olmalidir.';
   }
 
@@ -433,6 +433,28 @@ async function initDetail() {
     <div class="ve-line"><span>Model Year</span><strong>${esc(c.YEAR || '-')}</strong></div>
     <div class="ve-line"><span>Valuation</span><strong>${money(c.PRICE)}</strong></div>
   `;
+
+  const damageRecords = Array.isArray(c.DAMAGE_RECORDS) ? c.DAMAGE_RECORDS : [];
+  const damageWrap = $('#dDamageRecords');
+  if (damageWrap) {
+    if (!damageRecords.length) {
+      damageWrap.innerHTML = '<div class="ve-line"><span>Kayit</span><strong>Hasar kaydi bulunmuyor</strong></div>';
+    } else {
+      damageWrap.innerHTML = damageRecords.map((item) => `
+        <div class="ve-line">
+          <span>
+            ${esc(item.DAMAGE_AREA || 'Area')} · ${esc(item.DAMAGE_TYPE || 'Type')}<br>
+            ${item.DESCRIPTION ? esc(item.DESCRIPTION) : ''}
+          </span>
+          <strong>
+            ${esc(item.DAMAGE_LEVEL || '-')}
+            ${item.ESTIMATED_COST ? ` · ${money(item.ESTIMATED_COST)}` : ''}
+            ${item.RECORDED_AT ? `<br><small>${esc(String(item.RECORDED_AT).slice(0, 16).replace('T', ' '))}</small>` : ''}
+          </strong>
+        </div>
+      `).join('');
+    }
+  }
 
   const canSendInquiry = !!(state.user && state.user.permissions?.can_send_inquiry);
   if (state.user && !canSendInquiry) {
