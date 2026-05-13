@@ -127,7 +127,7 @@ class CarRepository
         return $car;
     }
 
-    public function create(array $data, int $adminId): bool
+    public function create(array $data, int $adminId): int
     {
         if ($this->db->isOracle()) {
             $sql = "INSERT INTO cars (
@@ -137,29 +137,72 @@ class CarRepository
                         cars_seq.NEXTVAL, :brand, :model, :year, :price, :mileage, :fuel_type, :gear_type, :color, :description, :images,
                         'AVAILABLE', :created_by, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
                     )";
+            
+            $this->db->execute($sql, [
+                'brand' => $data['brand'],
+                'model' => $data['model'],
+                'year' => (int) $data['year'],
+                'price' => (float) $data['price'],
+                'mileage' => (int) $data['mileage'],
+                'fuel_type' => $data['fuel_type'] ?? null,
+                'gear_type' => $data['gear_type'] ?? null,
+                'color' => $data['color'] ?? null,
+                'description' => $data['description'] ?? null,
+                'images' => $data['images'] ?? '[]',
+                'created_by' => $adminId,
+            ]);
+            
+            // For Oracle, get the last inserted sequence value
+            $result = $this->db->fetchOne("SELECT cars_seq.CURRVAL AS car_id FROM DUAL", []);
+            return (int) ($result['CAR_ID'] ?? 0);
         } else {
+            // PostgreSQL: use RETURNING
             $sql = "INSERT INTO cars (
                         brand, model, year, price, mileage, fuel_type, gear_type, color, description, images,
                         status, created_by, created_at, updated_at, is_deleted
                     ) VALUES (
                         :brand, :model, :year, :price, :mileage, :fuel_type, :gear_type, :color, :description, :images,
                         'AVAILABLE', :created_by, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0
-                    )";
+                    ) RETURNING car_id";
+            
+            $result = $this->db->fetchOne($sql, [
+                'brand' => $data['brand'],
+                'model' => $data['model'],
+                'year' => (int) $data['year'],
+                'price' => (float) $data['price'],
+                'mileage' => (int) $data['mileage'],
+                'fuel_type' => $data['fuel_type'] ?? null,
+                'gear_type' => $data['gear_type'] ?? null,
+                'color' => $data['color'] ?? null,
+                'description' => $data['description'] ?? null,
+                'images' => $data['images'] ?? '[]',
+                'created_by' => $adminId,
+            ]);
+            
+            return (int) ($result['CAR_ID'] ?? 0);
+        }
+    }
+
+    public function insertDamageRecords(int $carId, array $damageRecords): void
+    {
+        if (!$this->db->isPgsql() || empty($damageRecords)) {
+            return;
         }
 
-        return $this->db->execute($sql, [
-            'brand' => $data['brand'],
-            'model' => $data['model'],
-            'year' => (int) $data['year'],
-            'price' => (float) $data['price'],
-            'mileage' => (int) $data['mileage'],
-            'fuel_type' => $data['fuel_type'] ?? null,
-            'gear_type' => $data['gear_type'] ?? null,
-            'color' => $data['color'] ?? null,
-            'description' => $data['description'] ?? null,
-            'images' => $data['images'] ?? '[]',
-            'created_by' => $adminId,
-        ]);
+        foreach ($damageRecords as $record) {
+            $this->db->execute(
+                "INSERT INTO damage_records (car_id, damage_area, damage_type, damage_level, estimated_cost, description, recorded_at)
+                 VALUES (:car_id, :damage_area, :damage_type, :damage_level, :estimated_cost, :description, CURRENT_TIMESTAMP)",
+                [
+                    'car_id' => $carId,
+                    'damage_area' => $record['damage_area'] ?? '',
+                    'damage_type' => $record['damage_type'] ?? '',
+                    'damage_level' => $record['damage_level'] ?? 'MINOR',
+                    'estimated_cost' => $record['estimated_cost'] ?? null,
+                    'description' => $record['description'] ?? null,
+                ]
+            );
+        }
     }
 
     public function markSold(int $carId): bool
@@ -191,7 +234,7 @@ class CarRepository
                     updated_at = CURRENT_TIMESTAMP
                 WHERE car_id = :car_id AND is_deleted = 0";
 
-        return $this->db->execute($sql, [
+        $success = $this->db->execute($sql, [
             'car_id' => $carId,
             'brand' => $data['brand'],
             'model' => $data['model'],
@@ -205,6 +248,29 @@ class CarRepository
             'images' => $data['images'] ?? '[]',
             'status' => $data['status'],
         ]);
+
+        if ($success && !empty($data['damage_records']) && $this->db->isPgsql()) {
+            // Delete existing damage records for this car
+            $this->db->execute('DELETE FROM damage_records WHERE car_id = :car_id', ['car_id' => $carId]);
+
+            // Insert new damage records
+            foreach ($data['damage_records'] as $record) {
+                $this->db->execute(
+                    "INSERT INTO damage_records (car_id, damage_area, damage_type, damage_level, estimated_cost, description, recorded_at)
+                     VALUES (:car_id, :damage_area, :damage_type, :damage_level, :estimated_cost, :description, CURRENT_TIMESTAMP)",
+                    [
+                        'car_id' => $carId,
+                        'damage_area' => $record['damage_area'] ?? '',
+                        'damage_type' => $record['damage_type'] ?? '',
+                        'damage_level' => $record['damage_level'] ?? 'MINOR',
+                        'estimated_cost' => $record['estimated_cost'] ?? null,
+                        'description' => $record['description'] ?? null,
+                    ]
+                );
+            }
+        }
+
+        return $success;
     }
 
     public function deletePermanently(int $carId): bool

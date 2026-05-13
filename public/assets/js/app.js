@@ -96,6 +96,97 @@ function favoriteHeartButton(carId, active, extraClass = '') {
   `;
 }
 
+function renderDamageRecordForm(record = null, index = null) {
+  const id = record?.damage_id || `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const area = record?.damage_area || '';
+  const type = record?.damage_type || '';
+  const level = record?.damage_level || 'MINOR';
+  const cost = record?.estimated_cost || '';
+  const description = record?.description || '';
+  const isNew = !record?.damage_id;
+
+  return `
+    <div class="damage-record-form" data-damage-id="${id}" style="border: 1px solid var(--border-color); border-radius: 4px; padding: 12px; background: var(--bg-secondary, #1a1a1a);">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+        <div class="field-hint-wrap">
+          <input class="damage-area" type="text" placeholder="Hasar Alani (Ornek: Front Bumper)" value="${esc(area)}" required>
+          <span class="field-hint">HASAR ALANI</span>
+        </div>
+        <div class="field-hint-wrap">
+          <input class="damage-type" type="text" placeholder="Hasar Tipi (Ornek: Scratch)" value="${esc(type)}" required>
+          <span class="field-hint">HASAR TIPI</span>
+        </div>
+        <div class="field-hint-wrap">
+          <select class="damage-level" required>
+            <option value="MINOR" ${level === 'MINOR' ? 'selected' : ''}>MINOR</option>
+            <option value="MODERATE" ${level === 'MODERATE' ? 'selected' : ''}>MODERATE</option>
+            <option value="MAJOR" ${level === 'MAJOR' ? 'selected' : ''}>MAJOR</option>
+          </select>
+          <span class="field-hint">HASAR SEVIYESI</span>
+        </div>
+        <div class="field-hint-wrap">
+          <input class="damage-cost" type="number" placeholder="Tahmini Maliyet" value="${cost}" step="0.01">
+          <span class="field-hint">TAHMINI MALIYET (TRY)</span>
+        </div>
+      </div>
+      <div class="field-hint-wrap">
+        <textarea class="damage-description" placeholder="Aciklama (Opsiyonel)" rows="2">${esc(description)}</textarea>
+        <span class="field-hint">ACIKLAMA</span>
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        ${!isNew ? `<span style="font-size: 0.85em; color: var(--text-muted); align-self: center;">ID: ${esc(id)}</span>` : ''}
+        <button type="button" class="btn btn-ghost btn-remove-damage" style="padding: 4px 8px; font-size: 0.9em;">Kaldır</button>
+      </div>
+    </div>
+  `;
+}
+
+function collectDamageRecords() {
+  const records = [];
+  $$('.damage-record-form').forEach((form) => {
+    const damageId = form.getAttribute('data-damage-id');
+    const area = form.querySelector('.damage-area')?.value.trim() || '';
+    const type = form.querySelector('.damage-type')?.value.trim() || '';
+    const level = form.querySelector('.damage-level')?.value || 'MINOR';
+    const cost = form.querySelector('.damage-cost')?.value.trim() || '';
+    const description = form.querySelector('.damage-description')?.value.trim() || '';
+
+    if (area && type) {
+      records.push({
+        damage_id: damageId,
+        damage_area: area,
+        damage_type: type,
+        damage_level: level,
+        estimated_cost: cost ? Number(cost) : null,
+        description: description || null,
+      });
+    }
+  });
+  return records;
+}
+
+function collectDamageRecordsFromAdmin() {
+  const records = [];
+  ($('#adminDamageRecordsList')?.querySelectorAll('.damage-record-form') || []).forEach((form) => {
+    const area = form.querySelector('.damage-area')?.value.trim() || '';
+    const type = form.querySelector('.damage-type')?.value.trim() || '';
+    const level = form.querySelector('.damage-level')?.value || 'MINOR';
+    const cost = form.querySelector('.damage-cost')?.value.trim() || '';
+    const description = form.querySelector('.damage-description')?.value.trim() || '';
+
+    if (area && type) {
+      records.push({
+        damage_area: area,
+        damage_type: type,
+        damage_level: level,
+        estimated_cost: cost ? Number(cost) : null,
+        description: description || null,
+      });
+    }
+  });
+  return records;
+}
+
 async function loadMe() {
   const data = await api('/api/auth/me');
   state.user = data.user;
@@ -831,6 +922,24 @@ async function initAdmin() {
     $('#adminImageFileInput')?.click();
   });
 
+  // Add damage record handler for admin form
+  const attachAdminDamageRecordHandlers = () => {
+    $$('#adminDamageRecordsList .btn-remove-damage').forEach((btn) => {
+      btn.onclick = () => {
+        btn.closest('.damage-record-form')?.remove();
+      };
+    });
+  };
+
+  $('#adminAddDamageRecordBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const damageList = $('#adminDamageRecordsList');
+    if (damageList) {
+      damageList.insertAdjacentHTML('beforeend', renderDamageRecordForm());
+      attachAdminDamageRecordHandlers();
+    }
+  });
+
   $('#adminImageFileInput')?.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
@@ -894,6 +1003,7 @@ async function initAdmin() {
       color: $('#aColor').value.trim(),
       images: parseImageUrls($('#aImages').value),
       description: $('#aDesc').value.trim(),
+      damage_records: collectDamageRecordsFromAdmin(),
     };
 
     const required = [payload.brand, payload.model, payload.year, payload.price, payload.mileage];
@@ -905,6 +1015,7 @@ async function initAdmin() {
     try {
       await api('/api/admin/cars', { method: 'POST', body: payload });
       e.target.reset();
+      $$('#adminDamageRecordsList').forEach(el => el.innerHTML = '');
       await loadAdminCars();
       toast('Arac eklendi.');
     } catch (err) {
@@ -941,6 +1052,15 @@ async function initAdminEdit() {
     $('#eImages').value = (car.IMAGES || []).map((img) => img.IMAGE_PATH).filter(Boolean).join('\n');
     $('#eStatus').value = car.STATUS || 'AVAILABLE';
     $('#eDesc').value = car.DESCRIPTION || '';
+
+    // Render damage records
+    const damageList = $('#damageRecordsList');
+    if (damageList) {
+      const damageRecords = car.DAMAGE_RECORDS || [];
+      if (damageRecords.length > 0) {
+        damageList.innerHTML = damageRecords.map((record, index) => renderDamageRecordForm(record, index)).join('');
+      }
+    }
   } catch (err) {
     toast(err.message);
     return;
@@ -950,6 +1070,27 @@ async function initAdminEdit() {
   $('#imageUploadBtn')?.addEventListener('click', () => {
     $('#imageFileInput')?.click();
   });
+
+  // Add damage record handler
+  const attachDamageRecordHandlers = () => {
+    $$('.btn-remove-damage').forEach((btn) => {
+      btn.onclick = () => {
+        btn.closest('.damage-record-form')?.remove();
+      };
+    });
+  };
+
+  $('#addDamageRecordBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const damageList = $('#damageRecordsList');
+    if (damageList) {
+      damageList.insertAdjacentHTML('beforeend', renderDamageRecordForm());
+      attachDamageRecordHandlers();
+    }
+  });
+
+  // Attach handlers to existing damage records
+  attachDamageRecordHandlers();
 
   $('#imageFileInput')?.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files || []);
@@ -1016,6 +1157,7 @@ async function initAdminEdit() {
       images: parseImageUrls($('#eImages').value),
       status: $('#eStatus').value,
       description: $('#eDesc').value.trim(),
+      damage_records: collectDamageRecords(),
     };
 
     const required = [payload.brand, payload.model, payload.year, payload.price, payload.mileage];

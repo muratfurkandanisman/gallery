@@ -69,6 +69,13 @@
             rows="3"></textarea>
         </div>
         <input id="aDesc" placeholder="Aciklama">
+        
+        <div style="grid-column: 1 / -1; border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px;">
+          <h4 style="margin: 0 0 12px 0;">Hasar Kayitlari (Opsiyonel)</h4>
+          <div id="adminDamageRecordsList" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px;"></div>
+          <button type="button" id="adminAddDamageRecordBtn" class="btn btn-ghost" style="align-self: flex-start;">+ Hasar Kaydi Ekle</button>
+        </div>
+
         <button class="btn btn-primary" type="submit">Arac Ekle</button>
       </form>
     </section>

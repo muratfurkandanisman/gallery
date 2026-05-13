@@ -49,8 +49,7 @@ class CarController
 
         $data = Request::input();
         try {
-            // The service create method expects a third parameter; pass null when not provided
-            $this->service->create($data, Auth::id(), null);
+            $this->service->create($data, Auth::id());
             Response::json(['success' => true, 'message' => 'Arac eklendi.']);
         } catch (Throwable $e) {
             Response::error($e->getMessage(), 422);

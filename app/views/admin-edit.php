@@ -88,6 +88,13 @@
           <textarea id="eDesc" placeholder="Aciklama" rows="3"></textarea>
           <span class="field-hint">ACIKLAMA</span>
         </div>
+
+        <div class="field-hint-wrap field-hint-full" style="border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px;">
+          <h4 style="margin: 0 0 12px 0;">Hasar Kayitlari</h4>
+          <div id="damageRecordsList" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px;"></div>
+          <button type="button" id="addDamageRecordBtn" class="btn btn-ghost" style="align-self: flex-start;">+ Hasar Kaydi Ekle</button>
+        </div>
+
         <button class="btn btn-primary" type="submit">Guncelle</button>
       </form>
     </section>

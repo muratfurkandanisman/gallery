@@ -40,7 +40,16 @@ class CarService
 
         $data['images'] = $this->normalizeImages($data['images'] ?? null);
 
-        $this->cars->create($data, $adminId);
+        $carId = $this->cars->create($data, $adminId);
+        
+        if (!$carId) {
+            throw new RuntimeException('Arac eklenemedi.');
+        }
+
+        // Insert damage records if provided
+        if (!empty($data['damage_records']) && is_array($data['damage_records'])) {
+            $this->cars->insertDamageRecords($carId, $data['damage_records']);
+        }
     }
 
     public function update(int $carId, array $data): void
@@ -66,6 +75,7 @@ class CarService
             'description' => trim((string) ($data['description'] ?? '')),
             'images' => $data['images'],
             'status' => $status,
+            'damage_records' => $data['damage_records'] ?? [],
         ];
 
         $ok = $this->cars->update($carId, $payload);
