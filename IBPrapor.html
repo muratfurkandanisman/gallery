@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="tr">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Internet Tabanli Programlama Proje Raporu - FEE CARS</title>
+	<style>
+		:root {
+			--bg: #f4f6fb;
+			--paper: #ffffff;
+			--text: #14213d;
+			--muted: #52607a;
+			--line: #d9e0ef;
+			--accent: #1f6feb;
+			--accent-soft: #eaf2ff;
+			--ok: #0f766e;
+		}
+
+		* { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+			background: linear-gradient(160deg, #f7f9ff 0%, #edf2ff 100%);
+			color: var(--text);
+			line-height: 1.6;
+		}
+
+		.container {
+			max-width: 980px;
+			margin: 28px auto;
+			background: var(--paper);
+			border: 1px solid var(--line);
+			border-radius: 16px;
+			padding: 34px;
+			box-shadow: 0 16px 40px rgba(10, 31, 68, 0.08);
+		}
+
+		h1, h2, h3 { margin: 0 0 10px 0; line-height: 1.3; }
+		h1 { font-size: 30px; }
+		h2 {
+			margin-top: 26px;
+			padding-bottom: 6px;
+			border-bottom: 2px solid var(--line);
+			font-size: 22px;
+		}
+		h3 {
+			margin-top: 18px;
+			font-size: 18px;
+			color: #1f355c;
+		}
+
+		p { margin: 8px 0; }
+		ul { margin: 8px 0 10px 18px; }
+		li { margin: 5px 0; }
+
+		.meta {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 10px;
+			margin-top: 14px;
+			margin-bottom: 18px;
+		}
+
+		.meta .item {
+			background: #f8faff;
+			border: 1px solid var(--line);
+			border-radius: 10px;
+			padding: 10px 12px;
+		}
+
+		.badge {
+			display: inline-block;
+			font-size: 12px;
+			padding: 4px 9px;
+			border-radius: 999px;
+			border: 1px solid #b8caef;
+			background: var(--accent-soft);
+			color: #11479d;
+			margin-right: 6px;
+			margin-top: 6px;
+		}
+
+		.note {
+			background: #fff8e8;
+			border: 1px solid #f2d6a2;
+			border-radius: 10px;
+			padding: 10px 12px;
+			margin-top: 12px;
+		}
+
+		.ok {
+			background: #effcf8;
+			border: 1px solid #b8ece1;
+			color: var(--ok);
+			border-radius: 10px;
+			padding: 10px 12px;
+			margin-top: 10px;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 10px;
+			border: 1px solid var(--line);
+			border-radius: 10px;
+			overflow: hidden;
+		}
+
+		th, td {
+			padding: 10px;
+			border-bottom: 1px solid var(--line);
+			text-align: left;
+			vertical-align: top;
+			font-size: 14px;
+		}
+
+		th {
+			background: #f1f5ff;
+			width: 30%;
+			font-weight: 700;
+		}
+
+		pre {
+			margin: 10px 0;
+			background: #0f172a;
+			color: #d7e2ff;
+			border-radius: 10px;
+			padding: 12px;
+			overflow: auto;
+			font-size: 12px;
+		}
+
+		.ss-box {
+			border: 2px dashed #b9c8e9;
+			border-radius: 10px;
+			padding: 12px;
+			margin: 10px 0;
+			color: var(--muted);
+			background: #f7faff;
+		}
+
+		.footer {
+			margin-top: 30px;
+			font-size: 12px;
+			color: var(--muted);
+			border-top: 1px dashed var(--line);
+			padding-top: 10px;
+		}
+
+		@media (max-width: 768px) {
+			.container { margin: 0; border-radius: 0; border: none; padding: 18px; }
+			.meta { grid-template-columns: 1fr; }
+			h1 { font-size: 24px; }
+		}
+
+		@media print {
+			body { background: #fff; }
+			.container { box-shadow: none; border: none; margin: 0; max-width: none; }
+			.note, .ok, .ss-box { break-inside: avoid; }
+		}
+	</style>
+</head>
+<body>
+	<article class="container">
+		<h1>Internet Tabanli Programlama Proje Raporu</h1>
+		<p><strong>Proje Adi:</strong> FEE CARS - Online Arac Galeri ve Yonetim Sistemi</p>
+		<p><strong>Ders:</strong> Internet Tabanli Programlama</p>
+		<p><strong>Rapor Amaci:</strong> Projenin sunucu/istemci mimarisi, kimlik dogrulama, ana islevler, AJAX entegrasyonu ve veritabani katmaninin ders gereksinimlerine gore dokumante edilmesi.</p>
+
+		<div>
+			<span class="badge">PHP</span>
+			<span class="badge">JavaScript</span>
+			<span class="badge">CSS</span>
+			<span class="badge">AJAX (fetch API)</span>
+			<span class="badge">DB: Oracle / PostgreSQL</span>
+		</div>
+
+		<div class="meta">
+			<div class="item"><strong>Mimari:</strong> MVC benzeri katmanli yapi (Controller-Service-Repository)</div>
+			<div class="item"><strong>API Yapisi:</strong> REST benzeri endpointler (/api/...)</div>
+			<div class="item"><strong>Oturum:</strong> PHP session tabanli kimlik yonetimi</div>
+			<div class="item"><strong>Rol Yonetimi:</strong> USER / ADMIN yetkilendirmesi</div>
+		</div>
+
+		<h2>A) Projenin Tanimi ve Temel Sureci</h2>
+		<p>Bu proje, kullanicilarin arac ilanlarini listeleyip filtreleyebildigi, detay goruntuleyebildigi, favoriye ekleyebildigi ve arac hakkinda talep/mesaj olusturabildigi bir web uygulamasidir. Admin kullanicilar ise arac ekleme-guncelleme-silme, talepleri yonetme, sohbetleri kontrol etme ve log kayitlarini goruntuleme islemlerini yapar.</p>
+
+		<h3>Temel Is Akisi</h3>
+		<ol>
+			<li>Kullanici giris/kayit ekranindan kimlik dogrulamasi yapar.</li>
+			<li>Showroom ekraninda araclari listeler ve filtreler.</li>
+			<li>Arac detayinda favori, talep ve sohbet islemleri yapar.</li>
+			<li>Admin panelinde CRUD islemleri ile envanteri yonetir.</li>
+			<li>Tum kritik oturum hareketleri aktiviteler tablosuna loglanir.</li>
+		</ol>
+
+		<h2>B) Modul 1 - Kullanici Kimlik Dogrulamasi</h2>
+		<h3>1. JS Dogrulamasi (Istemci Tarafi)</h3>
+		<ul>
+			<li>Giris/kayit formunda e-posta format kontrolu ve minimum sifre uzunlugu kontrolu yapilmaktadir.</li>
+			<li>Kayit modunda ad-soyad minimum karakter kontrolu uygulanmaktadir.</li>
+			<li>Admin arac ekleme/guncellemede zorunlu alanlar (marka, model, yil, fiyat, km) bos gecilemez.</li>
+		</ul>
+		<pre>// public/assets/js/app.js
+const validationError = validateAccessForm(mode);
+if (validationError) {
+	toast(validationError);
+	return;
+}</pre>
+
+		<h3>2. PHP Dogrulamasi (Sunucu Tarafi)</h3>
+		<ul>
+			<li>AuthService icinde ad-soyad, e-posta ve sifre kontrolleri yapilir.</li>
+			<li>CarService icinde zorunlu alan kontrolu ve durum (AVAILABLE/SOLD) gecerliligi kontrol edilir.</li>
+			<li>InquiryService ve ChatService icinde mesaj uzunluk ve erisim kontrolleri vardir.</li>
+		</ul>
+		<pre>// app/services/AuthService.php
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+	throw new InvalidArgumentException('Gecerli bir e-posta giriniz.');
+}</pre>
+
+		<h3>3. Sifre Guvenligi - SHA + Guvenli Hash</h3>
+		<p>Proje gereksinimine uygun olarak sifreler once SHA-256 ile ozetlenmekte, sonra guvenli parola hash mekanizmasi ile veritabanina kaydedilmektedir. Giriste SHA-256 tabanli dogrulama yapilir; eski hash kayitlari geriye donuk uyumlulukla dogrulanip otomatik migrate edilir.</p>
+		<pre>// app/services/AuthService.php
+$shaPassword = hash('sha256', $password);
+$hash = password_hash($shaPassword, PASSWORD_DEFAULT);
+
+$verifiedWithSha = password_verify($shaPassword, $user['password_hash']);</pre>
+
+		<h3>4. Veritabani Sorgulama</h3>
+		<p>Kullanici sorgulari UserRepository katmaninda parametrik SQL ile calisir:</p>
+		<pre>// app/repositories/UserRepository.php
+SELECT user_id, full_name, email, password_hash, role, is_active
+FROM users
+WHERE LOWER(email)=LOWER(:email)
+FETCH FIRST 1 ROWS ONLY</pre>
+
+		<h2>C) Modul 2 - Ana Islev (CRUD + Is Kurallari)</h2>
+		<h3>1. PHP Islevleri</h3>
+		<ul>
+			<li>Arac listeleme/detay: /api/cars, /api/cars/{id}</li>
+			<li>Admin arac ekleme/guncelleme/satma/silme:
+				/api/admin/cars (POST), /api/admin/cars/{id} (PUT/DELETE), /mark-sold</li>
+			<li>Favori islemleri: /api/favorites ve /api/favorites/{carId}</li>
+			<li>Talep olusturma ve admin durum guncelleme: /api/inquiries, /api/admin/inquiries/{id}</li>
+		</ul>
+
+		<h3>2. JS Islevleri ve Dogrulama</h3>
+		<ul>
+			<li>Filtreleme: marka/model/min-max fiyat parametreleriyle dinamik listeleme.</li>
+			<li>Form submitleri fetch API ile asenkron olarak backend endpointlerine gonderilir.</li>
+			<li>Hatali girislerde kullaniciya toast mesajlari ile geri bildirim verilir.</li>
+		</ul>
+
+		<h3>3. CSS (Sayfa Gorunumu)</h3>
+		<ul>
+			<li>Tek bir merkez stylesheet dosyasi ile tutarli tema kullanilmistir.</li>
+			<li>Auth, showroom, detay, admin ve modal bilesenleri responsive olarak tasarlanmistir.</li>
+			<li>Button, kart, form ve tablo bilesenlerinde ortak sinif yapisi tercih edilmistir.</li>
+		</ul>
+
+		<h3>4. SQL/DB Katmani</h3>
+		<p>Veri yapisi users, cars, inquiries, favorites, chat_conversations, chat_messages, user_activity_logs gibi tablolarla iliskisel olarak kurgulanmistir.</p>
+		<table>
+			<tr><th>Tablo</th><th>Amac</th></tr>
+			<tr><td>users</td><td>Kullanici kimlik bilgileri, sifre hash, rol ve oturum alanlari</td></tr>
+			<tr><td>cars</td><td>Arac envanteri, teknik ozellikler, fiyat, durum</td></tr>
+			<tr><td>favorites</td><td>Kullanici-favori iliskisi</td></tr>
+			<tr><td>inquiries</td><td>Kullanici talepleri ve admin isleme durumlari</td></tr>
+			<tr><td>chat_conversations / chat_messages</td><td>Kullanici-admin mesajlasma altyapisi</td></tr>
+			<tr><td>user_activity_logs</td><td>Login/logout/failed_login gibi hareket kayitlari</td></tr>
+		</table>
+
+		<h2>D) Modul 3 - AJAX Entegrasyonu</h2>
+		<p>Proje genelinde AJAX ihtiyaci fetch API ile merkezi bir <em>api()</em> yardimci fonksiyonu uzerinden karsilanmistir. Sayfa yenilemeden veri cekme/gonderme yapilir.</p>
+		<pre>// public/assets/js/app.js
+const res = await fetch(`${candidates[i]}${path}`, cfg);
+const data = await res.json().catch(() => ({}));</pre>
+
+		<h3>AJAX Kullanilan Baslica Senaryolar</h3>
+		<ul>
+			<li>Giris/kayit/logout islemleri</li>
+			<li>Arac listeleme, detay cekme ve filtreleme</li>
+			<li>Favori ekleme-cikarma</li>
+			<li>Talep olusturma ve durum guncelleme</li>
+			<li>Admin panelinde arac CRUD islemleri ve resim yukleme</li>
+			<li>Sohbet mesajlarini getirme/gonderme islemleri</li>
+		</ul>
+
+		<h2>E) Gereksinimler ve Teslim Kontrol Listesi</h2>
+		<h3>1. OYS Icin Ham Kaynak Kodlar</h3>
+		<ul>
+			<li>Tum proje klasoru (PHP, HTML, CSS, JS, SQL, AJAX kodu) ziplenerek OYS'ye yuklenmelidir.</li>
+			<li>Ozellikle app/, public/, database/, index.php ve README benzeri aciklama dosyalari dahil edilmelidir.</li>
+		</ul>
+
+		<h3>2. Turnitin Icin PDF Rapor</h3>
+		<ul>
+			<li>Bu rapor Word'e aktarilip ekran goruntuleri eklenmelidir.</li>
+			<li>Script bolumleri (PHP/JS/SQL/CSS) kisa aciklamalarla birlikte verilmelidir.</li>
+			<li>Son hali PDF olarak kaydedilip Turnitin'e yuklenmelidir.</li>
+		</ul>
+
+		<div class="ss-box">
+			<strong>Ekran Goruntusu Alani 1:</strong> Giris/Kayit formu (JS + PHP dogrulama)
+		</div>
+		<div class="ss-box">
+			<strong>Ekran Goruntusu Alani 2:</strong> Showroom listesi ve filtreleme islemi
+		</div>
+		<div class="ss-box">
+			<strong>Ekran Goruntusu Alani 3:</strong> Admin panel arac ekleme/guncelleme/silme
+		</div>
+		<div class="ss-box">
+			<strong>Ekran Goruntusu Alani 4:</strong> Sohbet veya talep yonetimi (AJAX)
+		</div>
+		<div class="ss-box">
+			<strong>Ekran Goruntusu Alani 5:</strong> Veritabani tablolari (ERD veya SQL script)
+		</div>
+
+		<h2>F) Sonuc</h2>
+		<p>FEE CARS projesi, Internet Tabanli Programlama dersi kapsaminda beklenen tum temel bilesenleri icermektedir: kullanici kimlik dogrulamasi, istemci/sunucu tarafi dogrulama, SHA tabanli sifre guvenligi, CRUD tabanli ana islevsellik, veritabani sorgulari ve AJAX entegrasyonu. Mimari olarak katmanli bir yapi kullanildigi icin proje hem gelistirilebilir hem de bakimi kolay bir yapi sunmaktadir.</p>
+
+		<div class="ok">
+			PDF cikarmak icin: Tarayicida bu dosyayi acin -> Ctrl+P -> Destination: Save as PDF -> A4 -> Save.
+		</div>
+
+		<p class="footer">Not: Bu rapor ders kriterlerine uygun bir ana iskelet sunar. Teslim oncesi ogrenci bilgileri, ders hocasi bilgisi ve tarih alanlari eklenmelidir.</p>
+	</article>
+</body>
+</html>

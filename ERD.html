@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery ERD - Current Schema</title>
+    <style>
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: #eef2f7;
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+            color: #162336;
+        }
+        .page {
+            width: 297mm;
+            min-height: 210mm;
+            margin: 0 auto;
+            padding: 10mm;
+            background: #ffffff;
+            box-shadow: 0 14px 40px rgba(2, 6, 23, 0.18);
+        }
+        .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8mm;
+        }
+        .head h1 {
+            margin: 0;
+            font-size: 30px;
+            letter-spacing: -0.01em;
+        }
+        .head p {
+            margin: 4px 0 0;
+            color: #526174;
+            font-size: 13px;
+        }
+        .legend {
+            color: #526174;
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: right;
+        }
+        .canvas {
+            border: 1px solid #d9e1ea;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #fbfdff;
+        }
+        svg { width: 100%; height: auto; display: block; }
+        .note {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #526174;
+        }
+        @media print {
+            @page { size: landscape; margin: 8mm; }
+            html, body { background: #fff; }
+            .page {
+                width: auto;
+                min-height: auto;
+                padding: 0;
+                box-shadow: none;
+            }
+            .canvas { border: none; border-radius: 0; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <div class="head">
+            <div>
+                <h1>Gallery ERD</h1>
+                <p>schema.sql ile uyumlu guncel model (6 entity)</p>
+            </div>
+            <div class="legend">
+                Duz cizgi: zorunlu iliski<br>
+                Kesikli cizgi: opsiyonel iliski (0..1)
+            </div>
+        </div>
+
+        <section class="canvas">
+            <svg viewBox="0 0 2400 1500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gallery ERD current schema">
+                <defs>
+                    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#0b1220" flood-opacity="0.12"/>
+                    </filter>
+                    <marker id="oneBar" markerWidth="10" markerHeight="20" refX="5" refY="10" orient="auto" markerUnits="strokeWidth">
+                        <path d="M5,2 L5,18" stroke="#334155" stroke-width="2.2"/>
+                    </marker>
+                    <marker id="crowFoot" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto" markerUnits="strokeWidth">
+                        <path d="M0,9 L16,9 M16,9 L8,2 M16,9 L8,16" stroke="#334155" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </marker>
+                    <marker id="optionalFoot" markerWidth="20" markerHeight="20" refX="17" refY="10" orient="auto" markerUnits="strokeWidth">
+                        <circle cx="5" cy="10" r="3.5" fill="#fff" stroke="#334155" stroke-width="1.8"/>
+                        <path d="M8,10 L17,10 M17,10 L10,3 M17,10 L10,17" stroke="#334155" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </marker>
+                </defs>
+
+                <rect x="20" y="20" width="2360" height="1460" rx="20" fill="#f8fbff" stroke="#dde6f0"/>
+
+                <!-- users -->
+                <g filter="url(#cardShadow)">
+                    <rect x="80" y="80" width="700" height="420" rx="18" fill="#fff7ed" stroke="#ea580c" stroke-width="3"/>
+                    <rect x="80" y="80" width="700" height="74" rx="18" fill="#ea580c"/>
+                    <text x="430" y="127" text-anchor="middle" fill="#fff" font-size="30" font-weight="700">users</text>
+                    <text x="110" y="205" font-size="20" font-weight="700">user_id (PK)</text>
+                    <text x="110" y="236" font-size="18">full_name VARCHAR2(120)</text>
+                    <text x="110" y="267" font-size="18">email VARCHAR2(180) UNIQUE</text>
+                    <text x="110" y="298" font-size="18">password_hash VARCHAR2(255)</text>
+                    <text x="110" y="329" font-size="18">role USER | ADMIN</text>
+                    <text x="110" y="360" font-size="18">created_at, last_login_at</text>
+                    <text x="110" y="391" font-size="18">is_active (0/1)</text>
+                </g>
+
+                <!-- cars -->
+                <g filter="url(#cardShadow)">
+                    <rect x="900" y="80" width="760" height="450" rx="18" fill="#eff6ff" stroke="#2563eb" stroke-width="3"/>
+                    <rect x="900" y="80" width="760" height="74" rx="18" fill="#2563eb"/>
+                    <text x="1280" y="127" text-anchor="middle" fill="#fff" font-size="30" font-weight="700">cars</text>
+                    <text x="930" y="205" font-size="20" font-weight="700">car_id (PK)</text>
+                    <text x="930" y="236" font-size="18">brand, model, year</text>
+                    <text x="930" y="267" font-size="18">price, mileage</text>
+                    <text x="930" y="298" font-size="18">fuel_type, gear_type, color</text>
+                    <text x="930" y="329" font-size="18">description, status</text>
+                    <text x="930" y="360" font-size="18">created_by (FK -> users.user_id)</text>
+                    <text x="930" y="391" font-size="18">created_at, updated_at, sold_at</text>
+                    <text x="930" y="422" font-size="18">is_deleted (0/1)</text>
+                </g>
+
+                <!-- user_activity_logs -->
+                <g filter="url(#cardShadow)">
+                    <rect x="1740" y="80" width="580" height="360" rx="18" fill="#f5f3ff" stroke="#7c3aed" stroke-width="3"/>
+                    <rect x="1740" y="80" width="580" height="74" rx="18" fill="#7c3aed"/>
+                    <text x="2030" y="127" text-anchor="middle" fill="#fff" font-size="26" font-weight="700">user_activity_logs</text>
+                    <text x="1770" y="205" font-size="20" font-weight="700">log_id (PK)</text>
+                    <text x="1770" y="236" font-size="18">user_id (FK, NULL)</text>
+                    <text x="1770" y="267" font-size="18">action, details</text>
+                    <text x="1770" y="298" font-size="18">created_at</text>
+                </g>
+
+                <!-- car_images -->
+                <g filter="url(#cardShadow)">
+                    <rect x="1580" y="560" width="740" height="360" rx="18" fill="#ecfeff" stroke="#0f766e" stroke-width="3"/>
+                    <rect x="1580" y="560" width="740" height="74" rx="18" fill="#0f766e"/>
+                    <text x="1950" y="607" text-anchor="middle" fill="#fff" font-size="30" font-weight="700">car_images</text>
+                    <text x="1610" y="685" font-size="20" font-weight="700">image_id (PK)</text>
+                    <text x="1610" y="716" font-size="18">car_id (FK -> cars.car_id)</text>
+                    <text x="1610" y="747" font-size="18">image_path, sort_order</text>
+                    <text x="1610" y="778" font-size="18">created_at</text>
+                </g>
+
+                <!-- favorites -->
+                <g filter="url(#cardShadow)">
+                    <rect x="80" y="620" width="660" height="320" rx="18" fill="#f0fdf4" stroke="#16a34a" stroke-width="3"/>
+                    <rect x="80" y="620" width="660" height="74" rx="18" fill="#16a34a"/>
+                    <text x="410" y="667" text-anchor="middle" fill="#fff" font-size="30" font-weight="700">favorites</text>
+                    <text x="110" y="745" font-size="20" font-weight="700">user_id (PK, FK)</text>
+                    <text x="110" y="776" font-size="18">car_id (PK, FK)</text>
+                    <text x="110" y="807" font-size="18">created_at</text>
+                </g>
+
+                <!-- inquiries -->
+                <g filter="url(#cardShadow)">
+                    <rect x="760" y="980" width="920" height="430" rx="18" fill="#fff1f2" stroke="#db2777" stroke-width="3"/>
+                    <rect x="760" y="980" width="920" height="74" rx="18" fill="#db2777"/>
+                    <text x="1220" y="1027" text-anchor="middle" fill="#fff" font-size="30" font-weight="700">inquiries</text>
+                    <text x="790" y="1105" font-size="20" font-weight="700">inquiry_id (PK)</text>
+                    <text x="790" y="1136" font-size="18">user_id (FK -> users.user_id)</text>
+                    <text x="790" y="1167" font-size="18">car_id (FK -> cars.car_id)</text>
+                    <text x="790" y="1198" font-size="18">message, status</text>
+                    <text x="790" y="1229" font-size="18">handled_by (FK -> users.user_id, NULL)</text>
+                    <text x="790" y="1260" font-size="18">handled_at, created_at</text>
+                </g>
+
+                <!-- Relationships -->
+                <g fill="none" stroke="#334155" stroke-width="4.2" stroke-linecap="round">
+                    <!-- users 1 -> N cars -->
+                    <line x1="780" y1="230" x2="900" y2="230" marker-start="url(#oneBar)" marker-end="url(#crowFoot)"/>
+
+                    <!-- users 1 -> 0..N logs -->
+                    <path d="M 430 80 V 50 H 1740 V 80" stroke-dasharray="10,8" marker-start="url(#oneBar)" marker-end="url(#optionalFoot)"/>
+
+                    <!-- cars 1 -> N car_images -->
+                    <path d="M 1500 530 V 560 H 1840" marker-start="url(#oneBar)" marker-end="url(#crowFoot)"/>
+
+                    <!-- users 1 -> N favorites -->
+                    <path d="M 300 500 V 560 H 260 V 620" marker-start="url(#oneBar)" marker-end="url(#crowFoot)"/>
+
+                    <!-- cars 1 -> N favorites -->
+                    <path d="M 1080 530 V 580 H 620 V 620" marker-start="url(#oneBar)" marker-end="url(#crowFoot)"/>
+
+                    <!-- users 1 -> N inquiries -->
+                    <path d="M 520 500 V 920 H 940 V 980" marker-start="url(#oneBar)" marker-end="url(#crowFoot)"/>
+
+                    <!-- cars 1 -> N inquiries -->
+                    <path d="M 1280 530 V 920 H 1220 V 980" marker-start="url(#oneBar)" marker-end="url(#crowFoot)"/>
+
+                    <!-- users 1 -> 0..N inquiries.handled_by -->
+                    <path d="M 700 500 V 900 H 1380 V 980" stroke-dasharray="10,8" marker-start="url(#oneBar)" marker-end="url(#optionalFoot)"/>
+                </g>
+
+                <g font-size="14" font-weight="700" fill="#475569" font-family="Segoe UI, Tahoma, Arial, sans-serif">
+                    <text x="1768" y="36">logs.user_id nullable</text>
+                    <text x="1365" y="900">handled_by nullable</text>
+                </g>
+            </svg>
+        </section>
+
+        <div class="note">Bu cizim database/schema.sql dosyasindaki guncel tablolara gore hazirlandi.</div>
+    </main>
+</body>
+</html>

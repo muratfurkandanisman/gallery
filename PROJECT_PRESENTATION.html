@@ -519,135 +519,154 @@
     </div>
 </div>
 
-<!-- SAYFA 7: ENTITY RELATIONSHIP DIAGRAM (ERD) -->
+<!-- SAYFA 7: ENTITY RELATIONSHIP DIAGRAM (ERD) - FULL PAGE -->
 <div class="page">
-    <h2>🔗 Entity Relationship Diagram (ERD) - Doğru Yapı</h2>
+    <h2 style="text-align: center; margin-bottom: 30px;">🔗 Entity Relationship Diagram (ERD)</h2>
+    <h3 style="text-align: center; color: #666; margin-bottom: 20px;">7 Entity - Veritabanı Yapısı</h3>
     
-    <div style="margin-top: 20px; overflow-x: auto;">
-        <svg viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; border: 1px solid #ddd;">
-            <!-- USERS Tablosu (Merkez) -->
-            <rect x="450" y="20" width="200" height="180" fill="#FFE0B2" stroke="#FF9800" stroke-width="2.5" rx="4"/>
-            <rect x="450" y="20" width="200" height="30" fill="#FF9800" rx="4"/>
-            <text x="550" y="42" text-anchor="middle" fill="white" font-weight="bold" font-size="14">🔑 users</text>
-            <line x1="450" y1="50" x2="650" y2="50" stroke="#FF9800" stroke-width="1.5"/>
+    <div style="margin: 0; padding: 0; height: 100%; display: flex; justify-content: center; align-items: center;">
+        <svg viewBox="0 0 2400 1100" xmlns="http://www.w3.org/2000/svg" style="width: 95%; height: 95%; border: 2px solid #ddd; border-radius: 8px; background: #fafafa;">
+            <!-- USERS Tablosu (Merkez Top) -->
+            <rect x="900" y="30" width="300" height="270" fill="#FFE0B2" stroke="#FF9800" stroke-width="4" rx="6"/>
+            <rect x="900" y="30" width="300" height="45" fill="#FF9800" rx="6"/>
+            <text x="1050" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="22">🔑 users</text>
+            <line x1="900" y1="75" x2="1200" y2="75" stroke="#FF9800" stroke-width="2"/>
             
-            <text x="465" y="70" font-size="11" font-weight="600">user_id (PK)</text>
-            <text x="465" y="87" font-size="10">full_name VARCHAR(120)</text>
-            <text x="465" y="102" font-size="10">email VARCHAR(180) UNIQUE</text>
-            <text x="465" y="117" font-size="10">password_hash VARCHAR(255)</text>
-            <text x="465" y="132" font-size="10">role: USER | ADMIN</text>
-            <text x="465" y="147" font-size="10">created_at, last_login_at</text>
-            <text x="465" y="162" font-size="10">is_active: 0 | 1</text>
-            <text x="465" y="177" font-size="10">+ attributes</text>
+            <text x="920" y="105" font-size="15" font-weight="700">user_id (PK)</text>
+            <text x="920" y="127" font-size="13">full_name VARCHAR(120)</text>
+            <text x="920" y="147" font-size="13">email VARCHAR(180) UNIQUE</text>
+            <text x="920" y="167" font-size="13">password_hash VARCHAR(255)</text>
+            <text x="920" y="187" font-size="13">role: USER | ADMIN</text>
+            <text x="920" y="207" font-size="13">created_at, last_login_at</text>
+            <text x="920" y="227" font-size="13">is_active: 0 | 1</text>
+            <text x="920" y="247" font-size="13">+ attributes</text>
             
-            <!-- CARS Tablosu (Sağ üst) -->
-            <rect x="800" y="50" width="220" height="200" fill="#E1F5FE" stroke="#2196F3" stroke-width="2.5" rx="4"/>
-            <rect x="800" y="50" width="220" height="30" fill="#2196F3" rx="4"/>
-            <text x="910" y="72" text-anchor="middle" fill="white" font-weight="bold" font-size="14">🚗 cars</text>
-            <line x1="800" y1="80" x2="1020" y2="80" stroke="#2196F3" stroke-width="1.5"/>
+            <!-- CARS Tablosu (Top Right) -->
+            <rect x="1500" y="30" width="330" height="300" fill="#E1F5FE" stroke="#2196F3" stroke-width="4" rx="6"/>
+            <rect x="1500" y="30" width="330" height="45" fill="#2196F3" rx="6"/>
+            <text x="1665" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="22">🚗 cars</text>
+            <line x1="1500" y1="75" x2="1830" y2="75" stroke="#2196F3" stroke-width="2"/>
             
-            <text x="815" y="100" font-size="11" font-weight="600">car_id (PK)</text>
-            <text x="815" y="115" font-size="10">brand, model, year</text>
-            <text x="815" y="130" font-size="10">price, mileage</text>
-            <text x="815" y="145" font-size="10">fuel_type, gear_type, color</text>
-            <text x="815" y="160" font-size="10">description, status</text>
-            <text x="815" y="175" font-size="10">images (JSON): resim listesi</text>
-            <text x="815" y="190" font-size="10">🔗 created_by → users</text>
-            <text x="815" y="205" font-size="10">created_at, updated_at</text>
-            <text x="815" y="220" font-size="10">sold_at, is_deleted</text>
+            <text x="1520" y="105" font-size="15" font-weight="700">car_id (PK)</text>
+            <text x="1520" y="128" font-size="13">brand, model, year</text>
+            <text x="1520" y="148" font-size="13">price, mileage</text>
+            <text x="1520" y="168" font-size="13">fuel_type, gear_type</text>
+            <text x="1520" y="188" font-size="13">color, description</text>
+            <text x="1520" y="208" font-size="13">status</text>
+            <text x="1520" y="228" font-size="13">images (JSON)</text>
+            <text x="1520" y="248" font-size="13">🔗 created_by → users</text>
+            <text x="1520" y="268" font-size="13">created_at, updated_at</text>
+            <text x="1520" y="288" font-size="13">sold_at, is_deleted</text>
             
-            <!-- FAVORITES Tablosu (Sol alt) -->
-            <rect x="80" y="340" width="220" height="140" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2.5" rx="4"/>
-            <rect x="80" y="340" width="220" height="30" fill="#4CAF50" rx="4"/>
-            <text x="190" y="362" text-anchor="middle" fill="white" font-weight="bold" font-size="14">❤️ favorites</text>
-            <line x1="80" y1="370" x2="300" y2="370" stroke="#4CAF50" stroke-width="1.5"/>
+            <!-- FAVORITES Tablosu (Bottom Left) -->
+            <rect x="120" y="570" width="300" height="210" fill="#E8F5E9" stroke="#4CAF50" stroke-width="4" rx="6"/>
+            <rect x="120" y="570" width="300" height="45" fill="#4CAF50" rx="6"/>
+            <text x="270" y="605" text-anchor="middle" fill="white" font-weight="bold" font-size="20">❤️ favorites</text>
+            <line x1="120" y1="615" x2="420" y2="615" stroke="#4CAF50" stroke-width="2"/>
             
-            <text x="95" y="390" font-size="11" font-weight="600">🔗 user_id (PK, FK)</text>
-            <text x="95" y="405" font-size="10">→ users(user_id)</text>
-            <text x="95" y="422" font-size="11" font-weight="600">🔗 car_id (PK, FK)</text>
-            <text x="95" y="437" font-size="10">→ cars(car_id)</text>
-            <text x="95" y="452" font-size="10">created_at: TIMESTAMP</text>
-            <text x="95" y="467" font-size="10">(Composite Primary Key)</text>
+            <text x="140" y="645" font-size="15" font-weight="700">🔗 user_id (PK, FK)</text>
+            <text x="140" y="665" font-size="13">→ users(user_id)</text>
+            <text x="140" y="690" font-size="15" font-weight="700">🔗 car_id (PK, FK)</text>
+            <text x="140" y="710" font-size="13">→ cars(car_id)</text>
+            <text x="140" y="735" font-size="13">created_at: TIMESTAMP</text>
+            <text x="140" y="755" font-size="13">(Composite PK)</text>
             
-            <!-- INQUIRIES Tablosu (Ortada alt) -->
-            <rect x="400" y="340" width="220" height="160" fill="#FCE4EC" stroke="#E91E63" stroke-width="2.5" rx="4"/>
-            <rect x="400" y="340" width="220" height="30" fill="#E91E63" rx="4"/>
-            <text x="510" y="362" text-anchor="middle" fill="white" font-weight="bold" font-size="14">❓ inquiries</text>
-            <line x1="400" y1="370" x2="620" y2="370" stroke="#E91E63" stroke-width="1.5"/>
+            <!-- INQUIRIES Tablosu (Bottom Mid-Left) -->
+            <rect x="540" y="570" width="300" height="240" fill="#FCE4EC" stroke="#E91E63" stroke-width="4" rx="6"/>
+            <rect x="540" y="570" width="300" height="45" fill="#E91E63" rx="6"/>
+            <text x="690" y="605" text-anchor="middle" fill="white" font-weight="bold" font-size="20">❓ inquiries</text>
+            <line x1="540" y1="615" x2="840" y2="615" stroke="#E91E63" stroke-width="2"/>
             
-            <text x="415" y="390" font-size="11" font-weight="600">inquiry_id (PK)</text>
-            <text x="415" y="405" font-size="10">🔗 user_id → users</text>
-            <text x="415" y="420" font-size="10">🔗 car_id → cars</text>
-            <text x="415" y="435" font-size="10">message: TEXT</text>
-            <text x="415" y="450" font-size="10">status: NEW|IN_PROGRESS|CLOSED</text>
-            <text x="415" y="465" font-size="10">🔗 handled_by → users (NULL)</text>
-            <text x="415" y="480" font-size="10">created_at, handled_at</text>
+            <text x="560" y="645" font-size="15" font-weight="700">inquiry_id (PK)</text>
+            <text x="560" y="665" font-size="13">🔗 user_id → users</text>
+            <text x="560" y="685" font-size="13">🔗 car_id → cars</text>
+            <text x="560" y="705" font-size="13">message: TEXT</text>
+            <text x="560" y="725" font-size="13">status (enum)</text>
+            <text x="560" y="745" font-size="13">🔗 handled_by → users</text>
+            <text x="560" y="765" font-size="13">created_at, handled_at</text>
             
-            <!-- CHAT_CONVERSATIONS Tablosu (Sağ alt) -->
-            <rect x="720" y="340" width="240" height="150" fill="#F1F8E9" stroke="#689F38" stroke-width="2.5" rx="4"/>
-            <rect x="720" y="340" width="240" height="30" fill="#689F38" rx="4"/>
-            <text x="840" y="362" text-anchor="middle" fill="white" font-weight="bold" font-size="14">💬 chat_conversations</text>
-            <line x1="720" y1="370" x2="960" y2="370" stroke="#689F38" stroke-width="1.5"/>
+            <!-- CHAT_CONVERSATIONS Tablosu (Bottom Mid) -->
+            <rect x="960" y="570" width="345" height="225" fill="#F1F8E9" stroke="#689F38" stroke-width="4" rx="6"/>
+            <rect x="960" y="570" width="345" height="45" fill="#689F38" rx="6"/>
+            <text x="1132" y="605" text-anchor="middle" fill="white" font-weight="bold" font-size="20">💬 chat_conversations</text>
+            <line x1="960" y1="615" x2="1305" y2="615" stroke="#689F38" stroke-width="2"/>
             
-            <text x="735" y="390" font-size="11" font-weight="600">conversation_id (PK)</text>
-            <text x="735" y="405" font-size="10">🔗 user_id → users</text>
-            <text x="735" y="420" font-size="10">🔗 car_id → cars</text>
-            <text x="735" y="435" font-size="10">status: OPEN | CLOSED</text>
-            <text x="735" y="450" font-size="10">UNIQUE(user_id, car_id)</text>
-            <text x="735" y="465" font-size="10">last_message_at, updated_at</text>
-            <text x="735" y="480" font-size="10">created_at</text>
+            <text x="980" y="645" font-size="15" font-weight="700">conversation_id (PK)</text>
+            <text x="980" y="665" font-size="13">🔗 user_id → users</text>
+            <text x="980" y="685" font-size="13">🔗 car_id → cars</text>
+            <text x="980" y="705" font-size="13">status: OPEN | CLOSED</text>
+            <text x="980" y="725" font-size="13">UNIQUE(user_id, car_id)</text>
+            <text x="980" y="745" font-size="13">last_message_at, created_at</text>
             
-            <!-- CHAT_MESSAGES Tablosu (En sağ) -->
-            <rect x="1030" y="340" width="240" height="170" fill="#E0F2F1" stroke="#009688" stroke-width="2.5" rx="4"/>
-            <rect x="1030" y="340" width="240" height="30" fill="#009688" rx="4"/>
-            <text x="1150" y="362" text-anchor="middle" fill="white" font-weight="bold" font-size="14">✉️ chat_messages</text>
-            <line x1="1030" y1="370" x2="1270" y2="370" stroke="#009688" stroke-width="1.5"/>
+            <!-- CHAT_MESSAGES Tablosu (Bottom Mid-Right) -->
+            <rect x="1425" y="570" width="330" height="255" fill="#E0F2F1" stroke="#009688" stroke-width="4" rx="6"/>
+            <rect x="1425" y="570" width="330" height="45" fill="#009688" rx="6"/>
+            <text x="1590" y="605" text-anchor="middle" fill="white" font-weight="bold" font-size="20">✉️ chat_messages</text>
+            <line x1="1425" y1="615" x2="1755" y2="615" stroke="#009688" stroke-width="2"/>
             
-            <text x="1045" y="390" font-size="11" font-weight="600">message_id (PK)</text>
-            <text x="1045" y="405" font-size="10">🔗 conversation_id → chat_conver.</text>
-            <text x="1045" y="420" font-size="10">🔗 sender_id → users</text>
-            <text x="1045" y="435" font-size="10">sender_role: USER | ADMIN</text>
-            <text x="1045" y="450" font-size="10">message_text: TEXT</text>
-            <text x="1045" y="465" font-size="10">is_read: 0 | 1</text>
-            <text x="1045" y="480" font-size="10">created_at: TIMESTAMP</text>
+            <text x="1445" y="645" font-size="15" font-weight="700">message_id (PK)</text>
+            <text x="1445" y="665" font-size="13">🔗 conversation_id → conv.</text>
+            <text x="1445" y="685" font-size="13">🔗 sender_id → users</text>
+            <text x="1445" y="705" font-size="13">sender_role: USER | ADMIN</text>
+            <text x="1445" y="725" font-size="13">message_text: TEXT</text>
+            <text x="1445" y="745" font-size="13">is_read: 0 | 1</text>
+            <text x="1445" y="765" font-size="13">created_at: TIMESTAMP</text>
+            
+            <!-- USER_ACTIVITY_LOGS Tablosu (Bottom Right) - YENİ! -->
+            <rect x="1890" y="570" width="345" height="255" fill="#F3E5F5" stroke="#9C27B0" stroke-width="4" rx="6"/>
+            <rect x="1890" y="570" width="345" height="45" fill="#9C27B0" rx="6"/>
+            <text x="2062" y="605" text-anchor="middle" fill="white" font-weight="bold" font-size="20">📝 user_activity_logs</text>
+            <line x1="1890" y1="615" x2="2235" y2="615" stroke="#9C27B0" stroke-width="2"/>
+            
+            <text x="1910" y="645" font-size="15" font-weight="700">log_id (PK, BIGSERIAL)</text>
+            <text x="1910" y="665" font-size="13">🔗 user_id (FK, NULL)</text>
+            <text x="1910" y="685" font-size="13">→ users(user_id)</text>
+            <text x="1910" y="705" font-size="13">action (LOGIN/LOGOUT/</text>
+            <text x="1910" y="725" font-size="13">  FAILED_LOGIN/ACTION)</text>
+            <text x="1910" y="745" font-size="13">details: JSON</text>
+            <text x="1910" y="765" font-size="13">created_at: TIMESTAMP</text>
             
             <!-- RELASYONLARİN ÇİZİMLERİ -->
             <!-- users -> cars (created_by) -->
-            <line x1="650" y1="100" x2="800" y2="100" stroke="#FF6F00" stroke-width="3" marker-end="url(#arrowOrange)"/>
-            <text x="710" y="90" font-size="11" fill="#FF6F00" font-weight="bold">1:N</text>
-            <text x="710" y="110" font-size="9" fill="#FF6F00">created_by</text>
+            <line x1="1200" y1="135" x2="1500" y2="135" stroke="#FF6F00" stroke-width="5" marker-end="url(#arrowOrange)"/>
+            <text x="1320" y="120" font-size="16" fill="#FF6F00" font-weight="bold">1:N</text>
+            <text x="1320" y="155" font-size="12" fill="#FF6F00">created_by</text>
             
             <!-- users -> favorites (1:N) -->
-            <path d="M 480 200 Q 300 270 190 340" stroke="#4CAF50" stroke-width="3" fill="none" marker-end="url(#arrowGreen)"/>
-            <text x="320" y="260" font-size="10" fill="#4CAF50" font-weight="bold">1:N</text>
+            <path d="M 975 300 Q 525 435 270 570" stroke="#4CAF50" stroke-width="5" fill="none" marker-end="url(#arrowGreen)"/>
+            <text x="630" y="420" font-size="16" fill="#4CAF50" font-weight="bold">1:N</text>
             
             <!-- cars -> favorites (1:N) -->
-            <path d="M 880 250 Q 550 290 300 380" stroke="#4CAF50" stroke-width="3" fill="none" marker-end="url(#arrowGreen)"/>
-            <text x="600" y="310" font-size="10" fill="#4CAF50" font-weight="bold">1:N</text>
+            <path d="M 1515 330 Q 900 450 420 570" stroke="#4CAF50" stroke-width="5" fill="none" marker-end="url(#arrowGreen)"/>
+            <text x="975" y="465" font-size="16" fill="#4CAF50" font-weight="bold">1:N</text>
             
             <!-- users -> inquiries (1:N) -->
-            <path d="M 520 200 Q 510 265 510 340" stroke="#E91E63" stroke-width="3" fill="none" marker-end="url(#arrowPink)"/>
-            <text x="520" y="270" font-size="10" fill="#E91E63" font-weight="bold">1:N</text>
+            <path d="M 1020 300 Q 780 435 690 570" stroke="#E91E63" stroke-width="5" fill="none" marker-end="url(#arrowPink)"/>
+            <text x="840" y="420" font-size="16" fill="#E91E63" font-weight="bold">1:N</text>
             
             <!-- cars -> inquiries (1:N) -->
-            <path d="M 850 250 Q 700 290 620 340" stroke="#E91E63" stroke-width="3" fill="none" marker-end="url(#arrowPink)"/>
-            <text x="730" y="290" font-size="10" fill="#E91E63" font-weight="bold">1:N</text>
+            <path d="M 1575 330 Q 1050 450 840 570" stroke="#E91E63" stroke-width="5" fill="none" marker-end="url(#arrowPink)"/>
+            <text x="1200" y="435" font-size="16" fill="#E91E63" font-weight="bold">1:N</text>
             
             <!-- users -> chat_conversations (1:N) -->
-            <path d="M 570 200 Q 700 270 800 340" stroke="#689F38" stroke-width="3" fill="none" marker-end="url(#arrowGreenDark)"/>
-            <text x="640" y="260" font-size="10" fill="#689F38" font-weight="bold">1:N</text>
+            <path d="M 1080 300 Q 1125 435 1132 570" stroke="#689F38" stroke-width="5" fill="none" marker-end="url(#arrowGreenDark)"/>
+            <text x="1125" y="420" font-size="16" fill="#689F38" font-weight="bold">1:N</text>
             
             <!-- cars -> chat_conversations (1:N) -->
-            <path d="M 920 250 Q 880 290 880 340" stroke="#689F38" stroke-width="3" fill="none" marker-end="url(#arrowGreenDark)"/>
-            <text x="930" y="290" font-size="10" fill="#689F38" font-weight="bold">1:N</text>
+            <path d="M 1605 330 Q 1330 450 1200 570" stroke="#689F38" stroke-width="5" fill="none" marker-end="url(#arrowGreenDark)"/>
+            <text x="1395" y="435" font-size="16" fill="#689F38" font-weight="bold">1:N</text>
             
             <!-- chat_conversations -> chat_messages (1:N) -->
-            <line x1="960" y1="415" x2="1030" y2="415" stroke="#009688" stroke-width="3" marker-end="url(#arrowCyan)"/>
-            <text x="985" y="405" font-size="10" fill="#009688" font-weight="bold">1:N</text>
+            <line x1="1305" y1="682" x2="1425" y2="682" stroke="#009688" stroke-width="5" marker-end="url(#arrowCyan)"/>
+            <text x="1350" y="665" font-size="16" fill="#009688" font-weight="bold">1:N</text>
             
             <!-- users -> chat_messages (sender_id) -->
-            <path d="M 630 150 Q 900 200 1050 350" stroke="#009688" stroke-width="2" stroke-dasharray="5,5" fill="none" marker-end="url(#arrowCyan)"/>
-            <text x="820" y="220" font-size="9" fill="#009688">sender_id</text>
+            <path d="M 1170 250 Q 1350 400 1475 580" stroke="#009688" stroke-width="3" stroke-dasharray="8,8" fill="none" marker-end="url(#arrowCyan)"/>
+            <text x="1300" y="400" font-size="13" fill="#009688" font-weight="bold">sender_id</text>
+            
+            <!-- users -> user_activity_logs (1:N) - YENİ! -->
+            <path d="M 1200 270 Q 1600 420 2062 570" stroke="#9C27B0" stroke-width="5" fill="none" marker-end="url(#arrowPurple)"/>
+            <text x="1530" y="420" font-size="16" fill="#9C27B0" font-weight="bold">1:N</text>
             
             <!-- Arrow markers -->
             <defs>
@@ -666,44 +685,60 @@
                 <marker id="arrowCyan" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
                     <path d="M0,0 L0,6 L9,3 z" fill="#009688"/>
                 </marker>
+                <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#9C27B0"/>
+                </marker>
             </defs>
         </svg>
     </div>
     
-    <div class="content-section" style="margin-top: 25px;">
-        <h3>📊 Entity Açıklamaları</h3>
-        <div class="db-feature" style="background: #FCE4EC; border-left-color: #E91E63;">
-            <strong>🔑 users (Merkez Entity)</strong><br>
-            Sistemin tüm kullanıcıları. Rol: USER (müşteri) veya ADMIN (satıcı)
-        </div>
-        <div class="db-feature" style="background: #E1F5FE; border-left-color: #2196F3;">
-            <strong>🚗 cars</strong><br>
-            Araç listeleri. images alanı JSON formatında resim bilgilerini içerir. created_by ile users'a bağlı.
-        </div>
-        <div class="db-feature" style="background: #E8F5E9; border-left-color: #4CAF50;">
-            <strong>❤️ favorites (Composite PK)</strong><br>
-            (user_id, car_id) bileşik anahtarı. Müşterilerin beğendikleri araçları tutar.
-        </div>
-        <div class="db-feature" style="background: #FCE4EC; border-left-color: #E91E63;">
-            <strong>❓ inquiries</strong><br>
-            Müşterilerin soruları. handled_by ile admin cevabı. Status: NEW → IN_PROGRESS → CLOSED
-        </div>
-        <div class="db-feature" style="background: #F1F8E9; border-left-color: #689F38;">
-            <strong>💬 chat_conversations</strong><br>
-            Araç başına konuşmalar. UNIQUE(user_id, car_id) - Her araç-kullanıcı çifti sadece 1 kez olabilir.
-        </div>
-        <div class="db-feature" style="background: #E0F2F1; border-left-color: #009688;">
-            <strong>✉️ chat_messages</strong><br>
-            Sohbet mesajları. sender_id ile users'a bağlı. sender_role: USER veya ADMIN
-        </div>
-    </div>
-    
-    <div class="footer">
+    <div class="footer" style="margin-top: 30px; text-align: center;">
+        <p style="color: #999; font-size: 12px;">📊 Toplam 7 Entity | 10+ İlişki | 🔑 Birincil Anahtarlar | 🔗 Yabancı Anahtarlar</p>
         <p>Gallery © 2026 - Sayfa 7</p>
     </div>
 </div>
 
-<!-- SAYFA 8: API ENDPOINTS -->
+<!-- SAYFA 8: ENTITY AÇIKLAMALARI -->
+<div class="page">
+    <h2>📊 Entity Detaylı Açıklamalar</h2>
+    
+    <div class="content-section">
+        <div class="db-feature" style="background: #FCE4EC; border-left-color: #E91E63;">
+            <strong>🔑 users (Merkez Entity)</strong><br>
+            Sistemin tüm kullanıcıları. Rol: USER (müşteri) veya ADMIN (satıcı). Tüm diğer entity'lere referans noktası.
+        </div>
+        <div class="db-feature" style="background: #E1F5FE; border-left-color: #2196F3;">
+            <strong>🚗 cars</strong><br>
+            Araç listeleri. images alanı JSON formatında resim bilgilerini içerir. created_by ile users'a bağlı. Her araç bir satıcı tarafından oluşturulur.
+        </div>
+        <div class="db-feature" style="background: #E8F5E9; border-left-color: #4CAF50;">
+            <strong>❤️ favorites (Composite PK)</strong><br>
+            (user_id, car_id) bileşik anahtarı. Müşterilerin beğendikleri araçları tutar. Her araç-kullanıcı çifti sadece bir kez.
+        </div>
+        <div class="db-feature" style="background: #FCE4EC; border-left-color: #E91E63;">
+            <strong>❓ inquiries</strong><br>
+            Müşterilerin soruları. handled_by ile admin cevabı. Status: NEW → IN_PROGRESS → CLOSED. İçeriği JSON details'e kaydedilir.
+        </div>
+        <div class="db-feature" style="background: #F1F8E9; border-left-color: #689F38;">
+            <strong>💬 chat_conversations</strong><br>
+            Araç başına konuşmalar. UNIQUE(user_id, car_id) - Her araç-kullanıcı çifti sadece 1 kez konuşabilir. Real-time mesajlaşma.
+        </div>
+        <div class="db-feature" style="background: #E0F2F1; border-left-color: #009688;">
+            <strong>✉️ chat_messages</strong><br>
+            Sohbet mesajları. sender_id ile users'a bağlı. sender_role: USER veya ADMIN. is_read bayrağı okunmuş mesajları işaret eder.
+        </div>
+        <div class="db-feature" style="background: #F3E5F5; border-left-color: #9C27B0;">
+            <strong>📝 user_activity_logs (YENİ!)</strong><br>
+            Kullanıcı giriş/çıkış ve aktivite kaydı. Audit trail ve güvenlik takibi amaçlı. action: LOGIN/LOGOUT/FAILED_LOGIN/ACTION. Details JSON formatında ek bilgiler içerir.
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Gallery © 2026 - Sayfa 8</p>
+    </div>
+</div>
+
+<!-- SAYFA 9: API ENDPOINTS -->
 <div class="page">
     <h2>🔌 API Endpoints</h2>
     
@@ -745,11 +780,11 @@
     </div>
     
     <div class="footer">
-        <p>Gallery © 2026 - Sayfa 8</p>
+        <p>Gallery © 2026 - Sayfa 9</p>
     </div>
 </div>
 
-<!-- SAYFA 9: SISTEM AKIŞI VE İŞ MANTAĞI -->
+<!-- SAYFA 10: SISTEM AKIŞI VE İŞ MANTAĞI -->
 <div class="page">
     <h2>⚙️ Sistem Akışı & İş Mantığı</h2>
     
@@ -807,11 +842,11 @@
     </div>
     
     <div class="footer">
-        <p>Gallery © 2026 - Sayfa 9</p>
+        <p>Gallery © 2026 - Sayfa 10</p>
     </div>
 </div>
 
-<!-- SAYFA 10: KULLANICI AKIŞLARI -->
+<!-- SAYFA 11: KULLANICI AKIŞLARI -->
 <div class="page">
     <h2>🔄 Kullanıcı Akışları</h2>
     
@@ -844,11 +879,11 @@
     </ul>
     
     <div class="footer">
-        <p>Gallery © 2026 - Sayfa 10</p>
+        <p>Gallery © 2026 - Sayfa 11</p>
     </div>
 </div>
 
-<!-- SAYFA 11: KATMANLI MİMARİ VE VERİ AKIŞI -->
+<!-- SAYFA 12: KATMANLI MİMARİ VE VERİ AKIŞI -->
 <div class="page">
     <h2>📊 Katmanlı Mimari & Veri Akışı</h2>
     
@@ -947,11 +982,11 @@
     </div>
     
     <div class="footer">
-        <p>Gallery © 2026 - Sayfa 11</p>
+        <p>Gallery © 2026 - Sayfa 12</p>
     </div>
 </div>
 
-<!-- SAYFA 12: GÜVENLİK VE PERFORMANS -->
+<!-- SAYFA 13: GÜVENLİK VE PERFORMANS -->
 <div class="page">
     <h2>🔐 Güvenlik & Performans</h2>
     
@@ -983,11 +1018,11 @@
     </ul>
     
     <div class="footer">
-        <p>Gallery © 2026 - Sayfa 12</p>
+        <p>Gallery © 2026 - Sayfa 13</p>
     </div>
 </div>
 
-<!-- SAYFA 13: KURULUM & DAĞITIM -->
+<!-- SAYFA 14: KURULUM & DAĞITIM -->
 <div class="page">
     <h2>🚀 Kurulum & Dağıtım</h2>
     
@@ -1019,11 +1054,11 @@
     </div>
     
     <div class="footer">
-        <p>Gallery © 2026 - Sayfa 13</p>
+        <p>Gallery © 2026 - Sayfa 14</p>
     </div>
 </div>
 
-<!-- SAYFA 14: KULLANICI AKTİVİTESİ KAYITLAMA SİSTEMİ -->
+<!-- SAYFA 15: KULLANICI AKTİVİTESİ KAYITLAMA SİSTEMİ -->
 <div class="page">
     <h2>📝 Kullanıcı Aktivitesi Kayıt Sistemi</h2>
     
@@ -1092,11 +1127,11 @@ if (count($failedAttempts) > 5) { /* Suspicious activity */ }
     </ul>
     
     <div class="footer">
-        <p>Gallery © 2026 - Sayfa 14</p>
+        <p>Gallery © 2026 - Sayfa 15</p>
     </div>
 </div>
 
-<!-- SAYFA 15: GELECEK GELİŞTİRMELER -->
+<!-- SAYFA 16: GELECEK GELİŞTİRMELER -->
 <div class="page">
     <h2>🔮 Gelecek Geliştirmeler</h2>
     
@@ -1128,11 +1163,11 @@ if (count($failedAttempts) > 5) { /* Suspicious activity */ }
     </ul>
     
     <div class="footer">
-        <p>Gallery © 2026 - Sayfa 15</p>
+        <p>Gallery © 2026 - Sayfa 16</p>
     </div>
 </div>
 
-<!-- SAYFA 16: SONUÇ -->
+<!-- SAYFA 17: SONUÇ -->
 <div class="page cover-page">
     <h1>Teşekkürler!</h1>
     <div class="subtitle">Gallery Araç Galerisi Yönetim Sistemi</div>

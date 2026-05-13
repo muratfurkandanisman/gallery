@@ -38,4 +38,13 @@ class UserRepository
         $sql = "UPDATE users SET last_login_at = CURRENT_TIMESTAMP WHERE user_id = :user_id";
         return $this->db->execute($sql, ['user_id' => $userId]);
     }
+
+    public function updatePasswordHash(int $userId, string $passwordHash): bool
+    {
+        $sql = "UPDATE users SET password_hash = :password_hash WHERE user_id = :user_id";
+        return $this->db->execute($sql, [
+            'password_hash' => $passwordHash,
+            'user_id' => $userId,
+        ]);
+    }
 }

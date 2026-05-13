@@ -24,7 +24,9 @@ class AuthService
             throw new InvalidArgumentException('Bu e-posta ile kayitli bir hesap var.');
         }
 
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+        // Keep strong password_hash usage while meeting SHA requirement with a pre-hash layer.
+        $shaPassword = hash('sha256', $password);
+        $hash = password_hash($shaPassword, PASSWORD_DEFAULT);
         $this->users->create($fullName, $email, $hash, 'USER');
     }
 
@@ -42,8 +44,19 @@ class AuthService
             throw new InvalidArgumentException('Kullanici bulunamadi veya pasif.');
         }
 
-        if (!password_verify($password, $user['password_hash'])) {
-            throw new InvalidArgumentException('E-posta veya sifre hatali.');
+        $shaPassword = hash('sha256', $password);
+        $verifiedWithSha = password_verify($shaPassword, $user['password_hash']);
+
+        if (!$verifiedWithSha) {
+            // Backward compatibility for existing records that were hashed without SHA pre-hash.
+            $legacyVerified = password_verify($password, $user['password_hash']);
+            if (!$legacyVerified) {
+                throw new InvalidArgumentException('E-posta veya sifre hatali.');
+            }
+
+            // Auto-migrate legacy hashes after successful login.
+            $newHash = password_hash($shaPassword, PASSWORD_DEFAULT);
+            $this->users->updatePasswordHash((int) $user['user_id'], $newHash);
         }
 
         $this->users->updateLastLogin((int) $user['user_id']);

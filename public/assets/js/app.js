@@ -316,6 +316,27 @@ function switchAuthMode(mode) {
   }
 }
 
+function validateAccessForm(mode) {
+  const email = $('#email')?.value?.trim() || '';
+  const password = $('#password')?.value || '';
+
+  if (!email || !email.includes('@')) {
+    return 'Gecerli bir e-posta giriniz.';
+  }
+  if (password.length < 6) {
+    return 'Sifre en az 6 karakter olmalidir.';
+  }
+
+  if (mode === 'register') {
+    const fullName = $('#fullName')?.value?.trim() || '';
+    if (fullName.length < 2) {
+      return 'Ad soyad en az 2 karakter olmalidir.';
+    }
+  }
+
+  return null;
+}
+
 async function initAccess() {
   if (state.user) {
     location.href = appUrl('/');
@@ -328,6 +349,12 @@ async function initAccess() {
   $('#accessForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const mode = e.currentTarget.dataset.mode;
+
+    const validationError = validateAccessForm(mode);
+    if (validationError) {
+      toast(validationError);
+      return;
+    }
 
     try {
       if (mode === 'register') {
@@ -846,6 +873,12 @@ async function initAdmin() {
       images: parseImageUrls($('#aImages').value),
       description: $('#aDesc').value.trim(),
     };
+
+    const required = [payload.brand, payload.model, payload.year, payload.price, payload.mileage];
+    if (required.some((v) => v === '' || Number.isNaN(Number(v)) || Number(v) <= 0)) {
+      toast('Marka, model, yil, fiyat ve km alanlarini gecerli doldurun.');
+      return;
+    }
 
     try {
       await api('/api/admin/cars', { method: 'POST', body: payload });
